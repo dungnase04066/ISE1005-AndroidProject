@@ -10,6 +10,7 @@ public class UserDTO {
     private String username;
     private String password;
     private int role_id;
+    private String role_name;
     private int status;
 
     public UserDTO() {
@@ -70,6 +71,17 @@ public class UserDTO {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getRole_name() {
+        switch (role_id) {
+            case 1:
+                return "Manager";
+            case 2:
+                return "Cooker";
+            default:
+                return "Staff";
+        }
     }
 
     @Override
