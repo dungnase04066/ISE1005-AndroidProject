@@ -33,8 +33,11 @@ public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         HttpHandler httpHandler = new HttpHandler();
-        String json = httpHandler.post(Constants.API_URL + "user/check/", "username=" + mUsername + "&password=" + mPassword);
         try {
+            JSONObject formData = new JSONObject();
+            formData.put("username", mUsername);
+            formData.put("password", mPassword);
+            String json = httpHandler.post(Constants.API_URL + "user/check/", formData.toString());
             JSONObject jsonObj = new JSONObject(json);
             if (jsonObj.getInt("size") > 0) {
                 JSONArray resultList = jsonObj.getJSONArray("result");
