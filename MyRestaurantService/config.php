@@ -4,7 +4,7 @@ $dbname = "dbname";
 $dbuser = "dbuser";
 $dbpass = "dbpass";
 
-// error_reporting(0);
+error_reporting(0);
 
 $mysqli = new mysqli($dbhost,$dbuser,$dbpass,$dbname);
 if ($mysqli->connect_errno) {
