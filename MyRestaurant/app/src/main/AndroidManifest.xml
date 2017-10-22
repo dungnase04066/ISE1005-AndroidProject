@@ -27,7 +27,9 @@
         <activity android:name=".manager.Menu" />
         <activity android:name=".manager.MenuForm" />
         <activity android:name=".manager.Table" />
-        <activity android:name=".manager.TableForm"></activity>
+        <activity android:name=".manager.TableForm" />
+        <activity android:name=".staff.ListTable" />
+        <activity android:name=".staff.OrderForm"></activity>
     </application>
 
 </manifest>
