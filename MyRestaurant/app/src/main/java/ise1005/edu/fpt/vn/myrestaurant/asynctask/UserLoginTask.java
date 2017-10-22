@@ -32,15 +32,12 @@ public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected Boolean doInBackground(Void... params) {
-        try {
-            // Simulate network access.
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            return false;
-        }
         HttpHandler httpHandler = new HttpHandler();
-        String json = httpHandler.post(Constants.API_URL + "user/check/", "username=" + mUsername + "&password=" + mPassword);
         try {
+            JSONObject formData = new JSONObject();
+            formData.put("username", mUsername);
+            formData.put("password", mPassword);
+            String json = httpHandler.post(Constants.API_URL + "user/check/", formData.toString());
             JSONObject jsonObj = new JSONObject(json);
             if (jsonObj.getInt("size") > 0) {
                 JSONArray resultList = jsonObj.getJSONArray("result");
@@ -51,11 +48,10 @@ public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
                 Session.currentUser.setUsername(result.getString("username"));
                 Session.currentUser.setRole_id(result.getInt("role_id"));
                 Session.currentUser.setStatus(result.getInt("status"));
-                Log.d("onPostExecute", Session.currentUser.toString());
                 return true;
             }
-        } catch (JSONException e) {
-            Log.e("JSONException", e.getMessage());
+        } catch (Exception e) {
+            Log.e("Exception", "Login fail");
         }
         return false;
     }

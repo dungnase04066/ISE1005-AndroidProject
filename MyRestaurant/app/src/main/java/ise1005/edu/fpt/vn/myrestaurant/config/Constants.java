@@ -5,5 +5,5 @@ package ise1005.edu.fpt.vn.myrestaurant.config;
  */
 
 public class Constants {
-    public static final String API_URL = "https://prm391.anhdung.net/";
+    public static final String API_URL = "http://10.0.3.2:8888/";
 }
