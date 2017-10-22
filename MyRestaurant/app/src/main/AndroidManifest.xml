@@ -18,9 +18,16 @@
         <activity android:name=".util.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".manager.User" />
+        <activity android:name=".manager.UserForm" />
+        <activity android:name=".manager.Menu" />
+        <activity android:name=".manager.MenuForm" />
+        <activity android:name=".manager.Table" />
+        <activity android:name=".manager.TableForm"></activity>
     </application>
 
 </manifest>
