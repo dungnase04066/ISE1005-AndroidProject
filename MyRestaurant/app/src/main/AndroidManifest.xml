@@ -35,6 +35,10 @@
             android:exported="true" />
 
         <activity android:name=".util.MainActivity"></activity>
+        <activity android:name=".staff.table" />
+        <activity android:name=".staff.TableActivity"></activity>
+        <activity android:name=".staff.ListTable" />
+        <activity android:name=".staff.OrderForm"></activity>
     </application>
 
 </manifest>
