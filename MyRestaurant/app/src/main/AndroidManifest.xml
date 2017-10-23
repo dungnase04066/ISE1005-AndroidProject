@@ -30,6 +30,8 @@
         <activity android:name=".manager.TableForm" />
         <activity android:name=".staff.table" />
         <activity android:name=".staff.TableActivity"></activity>
+        <activity android:name=".staff.ListTable" />
+        <activity android:name=".staff.OrderForm"></activity>
     </application>
 
 </manifest>
