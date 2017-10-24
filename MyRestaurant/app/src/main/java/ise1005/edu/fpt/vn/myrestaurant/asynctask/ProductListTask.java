@@ -21,11 +21,9 @@ public class ProductListTask extends AsyncTask<Void, Void, Boolean> {
     List<ProductDTO> listProduct =  new ArrayList<>();
     String url = Constants.API_URL+"product/get/";
     private IAsyncTaskHandler container;
-    private String name;
 
 
-    public ProductListTask(String name, IAsyncTaskHandler container) {
-        this.name = name;
+    public ProductListTask(IAsyncTaskHandler container) {
         this.container = container;
     }
     
@@ -43,10 +41,10 @@ public class ProductListTask extends AsyncTask<Void, Void, Boolean> {
                     ProductDTO product;
                     int id = result.getInt("id");
                     String name = result.getString("name");
-                    Log.d("111111",name);
                     String description = result.getString("description");
                     double price = result.getDouble("price");
                     product = new ProductDTO(id,name,price,description);
+                    Log.d("product "+ i+":",product.toString());
                     listProduct.add(product);
                 }
             } catch (Exception e) {
