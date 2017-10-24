@@ -12,63 +12,25 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/mUserEdtSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:ems="10"
+            android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/mUserEdtSearch"
-                android:layout_width="288dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/mTableBtnSearch"
-                android:layout_toStartOf="@+id/mTableBtnSearch"
-                android:ems="10"
-                android:inputType="textPersonName" />
-
-            <Button
-                android:id="@+id/mTableBtnSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_weight="1"
-                android:text="Search" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <ListView
+            android:id="@+id/mUserLv"
             android:layout_width="match_parent"
-            android:layout_height="408dp"
-            android:orientation="horizontal"
-            android:layout_weight="0.23">
+            android:layout_height="0dip"
+            android:layout_weight="1" />
 
-            <ListView
-                android:id="@+id/mUserLv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/mTableBtnSearch"
-                android:footerDividersEnabled="false" />
-        </LinearLayout>
-
-        <LinearLayout
+        <Button
+            android:id="@+id/mUserBtnAdd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/mUserBtnAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Add User" />
-        </LinearLayout>
+            android:layout_weight="1"
+            android:text="Add User" />
 
     </LinearLayout>
 

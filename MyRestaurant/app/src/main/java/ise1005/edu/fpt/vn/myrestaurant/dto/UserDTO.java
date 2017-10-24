@@ -1,5 +1,7 @@
 package ise1005.edu.fpt.vn.myrestaurant.dto;
 
+import java.util.HashMap;
+
 /**
  * Created by DungNA on 10/20/17.
  */
@@ -102,5 +104,15 @@ public class UserDTO {
                 ", role_id=" + role_id +
                 ", status=" + status +
                 '}';
+    }
+
+    public HashMap<String, String> toHashMap(){
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("id",""+id);
+        hashMap.put("name",name);
+        hashMap.put("username",username);
+        hashMap.put("role_name",getRole_name());
+
+        return hashMap;
     }
 }
