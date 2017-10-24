@@ -1,5 +1,7 @@
 package ise1005.edu.fpt.vn.myrestaurant.dto;
 
+import java.util.HashMap;
+
 /**
  * Created by DungNA on 10/20/17.
  */
@@ -71,5 +73,15 @@ public class TableDTO {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    public HashMap<String, String> toHashMap(){
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("id",""+id);
+        hashMap.put("name",name);
+        hashMap.put("description",description);
+        hashMap.put("status",""+status);
+
+        return hashMap;
     }
 }
