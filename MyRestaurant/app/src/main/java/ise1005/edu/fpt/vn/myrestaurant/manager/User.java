@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetUserTask;
+import ise1005.edu.fpt.vn.myrestaurant.asynctask.ManagerUserTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.UserDTO;
@@ -27,7 +27,7 @@ public class User extends AppCompatActivity implements IAsyncTaskHandler {
     ListView lv;
     EditText edtSearch;
     Button btnAdd;
-    GetUserTask getUserTask;
+    ManagerUserTask getUserTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class User extends AppCompatActivity implements IAsyncTaskHandler {
 
         edtSearch.requestFocus();
 
-        getUserTask = new GetUserTask("get",edtSearch.getText().toString(), User.this, lv, null);
+        getUserTask = new ManagerUserTask("get",edtSearch.getText().toString(), User.this, lv, null);
 
 
         edtSearch.addTextChangedListener(new TextWatcher() {
@@ -58,7 +58,7 @@ public class User extends AppCompatActivity implements IAsyncTaskHandler {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                getUserTask = new GetUserTask("get",edtSearch.getText().toString(), User.this, lv, null);
+                getUserTask = new ManagerUserTask("get",edtSearch.getText().toString(), User.this, lv, null);
 
             }
 
@@ -100,9 +100,9 @@ public class User extends AppCompatActivity implements IAsyncTaskHandler {
                 UserDTO u = new UserDTO();
                 u.setId(Integer.parseInt(id));
                 try{
-                    new GetUserTask("delete",null,null,null,u);
+                    new ManagerUserTask("delete",null,null,null,u);
                     Log.e("Deleted: ", ""+u.getId());
-                    new GetUserTask("get","", User.this, lv, null);
+                    new ManagerUserTask("get","", User.this, lv, null);
                 }catch (Exception ex){
                     Log.e("Error:", ex.getMessage());
                 }
@@ -126,7 +126,7 @@ public class User extends AppCompatActivity implements IAsyncTaskHandler {
             if(resultCode == RESULT_OK) {
                 String result = data.getStringExtra("result");
                 Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-                new GetUserTask("get","", User.this, lv, null);
+                new ManagerUserTask("get","", User.this, lv, null);
             }
         }
     }

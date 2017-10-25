@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetUserTask;
+import ise1005.edu.fpt.vn.myrestaurant.asynctask.ManagerUserTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.UserDTO;
@@ -165,7 +165,7 @@ public class UserForm extends AppCompatActivity implements IAsyncTaskHandler {
         if(cancel){
             focusView.requestFocus();
         }else{
-            new GetUserTask("create",null, UserForm.this, null, u);
+            new ManagerUserTask("create",null, UserForm.this, null, u);
         }
 
     }
@@ -212,7 +212,7 @@ public class UserForm extends AppCompatActivity implements IAsyncTaskHandler {
             focusView.requestFocus();
         }else{
             Log.e("Update: ", u.toString());
-            new GetUserTask("update",null, UserForm.this, null, u);
+            new ManagerUserTask("update",null, UserForm.this, null, u);
         }
 
 
@@ -225,7 +225,7 @@ public class UserForm extends AppCompatActivity implements IAsyncTaskHandler {
             UserDTO u = new UserDTO();
             u.setId(Integer.parseInt(up_uid));
 
-            new GetUserTask("updateGetForm", null, UserForm.this, null, u);
+            new ManagerUserTask("updateGetForm", null, UserForm.this, null, u);
 
 
         }catch (Exception ex){

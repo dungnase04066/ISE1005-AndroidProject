@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetTableTask;
+import ise1005.edu.fpt.vn.myrestaurant.asynctask.ManagerTableTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
@@ -101,7 +101,7 @@ public class TableForm extends AppCompatActivity implements IAsyncTaskHandler {
         if(cancel){
             focusView.requestFocus();
         }else{
-            new GetTableTask("create",null, TableForm.this, null, t);
+            new ManagerTableTask("create",null, TableForm.this, null, t);
         }
 
     }
@@ -135,7 +135,7 @@ public class TableForm extends AppCompatActivity implements IAsyncTaskHandler {
             focusView.requestFocus();
         }else{
             Log.e("Update: ", t.toString());
-            new GetTableTask("update",null, TableForm.this, null, t);
+            new ManagerTableTask("update",null, TableForm.this, null, t);
         }
 
 
@@ -148,7 +148,7 @@ public class TableForm extends AppCompatActivity implements IAsyncTaskHandler {
             TableDTO t = new TableDTO();
             t.setId(Integer.parseInt(up_tid));
 
-            new GetTableTask("updateGetForm", null, TableForm.this, null, t);
+            new ManagerTableTask("updateGetForm", null, TableForm.this, null, t);
 
 
         }catch (Exception ex){

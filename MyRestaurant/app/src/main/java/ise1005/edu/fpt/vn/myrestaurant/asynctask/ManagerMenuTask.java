@@ -20,55 +20,52 @@ import java.util.List;
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
-import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
-import ise1005.edu.fpt.vn.myrestaurant.dto.UserDTO;
-import ise1005.edu.fpt.vn.myrestaurant.manager.TableForm;
-import ise1005.edu.fpt.vn.myrestaurant.manager.UserForm;
+import ise1005.edu.fpt.vn.myrestaurant.manager.MenuForm;
 
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by sengx on 10/24/2017.
+ * Created by sengx on 10/22/2017.
  */
 
-public class GetUserTask {
+public class ManagerMenuTask {
 
-    public GetUserTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, UserDTO u){
+    public ManagerMenuTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, ProductDTO p){
 
         if(method.equals("get")){
-            new getUser(txtSearch,container,lv).execute((Void) null);
+            new GetMenuTask(txtSearch,container,lv).execute((Void) null);
         }
         else if(method.equals("create")){
-            new createUser(container, u).execute((Void) null);
+            new CreateMenuTask(container, p).execute((Void) null);
         }
         else if(method.equals("delete")){
-            new deleteUser(u).execute((Void) null);
+            new DeleteMenuTask(p).execute((Void) null);
         }
         else if(method.equals("updateGetForm")){
-            new UpdateFormUser(container, u).execute((Void) null);
+            new UpdateFormMenuTask(container, p).execute((Void) null);
         }
         else  if(method.equals("update")){
-            new UpdateUser(container, u).execute((Void) null);
+            new Update(container, p).execute((Void) null);
         }
 
     }
 
 }
 
-class getUser extends AsyncTask<Void, Void, Boolean> {
+class GetMenuTask extends AsyncTask<Void, Void, Boolean> {
 
     private final String txtSearch;
     private final IAsyncTaskHandler container;
-    private final List<HashMap<String,String>> lstUsers;
-    private JSONObject oneUser;
+    private final List<HashMap<String,String>> lstMenus;
+    private JSONObject oneMenu;
     private Activity activity;
     private ListView lv;
 
-    public getUser(String txtSearch, IAsyncTaskHandler container, ListView lv){
+    public GetMenuTask(String txtSearch, IAsyncTaskHandler container, ListView lv){
         this.txtSearch = txtSearch;
         this.container = container;
         activity = (Activity)container;
-        lstUsers = new ArrayList<>();
+        lstMenus = new ArrayList<>();
         this.lv = lv;
 
     }
@@ -78,24 +75,20 @@ class getUser extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground(Void... voids) {
         HttpHandler httpHandler = new HttpHandler();
         try{
-            String json = httpHandler.get(Constants.API_URL + "user/get/?name=" + txtSearch);
+            String json = httpHandler.get(Constants.API_URL + "product/get/?name=" + txtSearch);
             JSONObject jsonObj = new JSONObject(json);
             JSONArray menus = jsonObj.getJSONArray("result");
 
-            lstUsers.clear();
+            lstMenus.clear();
 
             for(int i=0;i<menus.length();i++){
-                oneUser = menus.getJSONObject(i);
-                String id = oneUser.getString("id");
-                String name = oneUser.getString("name");
-                String username = oneUser.getString("username");
-                String role_id = oneUser.getString("role_id");
-                UserDTO u = new UserDTO();
-                u.setId(Integer.parseInt(id));
-                u.setName(name);
-                u.setUsername(username);
-                u.setRole_id(Integer.parseInt(role_id));
-                lstUsers.add(u.toHashMap());
+                oneMenu = menus.getJSONObject(i);
+                String id = oneMenu.getString("id");
+                String name = oneMenu.getString("name");
+                String desc = oneMenu.getString("description");
+                String price = oneMenu.getString("price");
+                ProductDTO p = new ProductDTO(Integer.parseInt(id),name,Double.parseDouble(price), desc);
+                lstMenus.add(p.toHashMap());
             }
 
         }catch (Exception ex){
@@ -107,24 +100,24 @@ class getUser extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
-        ListAdapter adapter = new SimpleAdapter(activity.getApplicationContext(), lstUsers,
-                R.layout.menu_list, new String[]{ "name","username", "role_name"},
+        ListAdapter adapter = new SimpleAdapter(activity.getApplicationContext(), lstMenus,
+                R.layout.menu_list, new String[]{ "name","description", "price"},
                 new int[]{R.id.mlTvName, R.id.mlTvDesc, R.id.mlTvPrice});
         lv.setAdapter(adapter);
     }
 }
 
-class createUser extends AsyncTask<Void, Void, Boolean> {
+class CreateMenuTask extends AsyncTask<Void, Void, Boolean> {
 
     IAsyncTaskHandler container;
-    UserDTO u;
+    ProductDTO p;
     Activity activity;
     boolean success = false;
 
-    public createUser(IAsyncTaskHandler container, UserDTO u){
+    public CreateMenuTask(IAsyncTaskHandler container, ProductDTO p){
         this.container = container;
         this.activity = (Activity)container;
-        this.u = u;
+        this.p = p;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -133,13 +126,10 @@ class createUser extends AsyncTask<Void, Void, Boolean> {
         HttpHandler httpHandler = new HttpHandler();
         try{
             JSONObject formData = new JSONObject();
-            formData.put("name", u.getName());
-            formData.put("username", u.getUsername());
-            formData.put("password", u.getPassword());
-            formData.put("role_id", u.getRole_id());
-            formData.put("status", u.getStatus());
-
-            String json = httpHandler.post(Constants.API_URL + "user/create/", formData.toString());
+            formData.put("name", p.getName());
+            formData.put("description", p.getDescription());
+            formData.put("price", ""+p.getPrice());
+            String json = httpHandler.post(Constants.API_URL + "product/create/", formData.toString());
             JSONObject jsonObj = new JSONObject(json);
             if (jsonObj.getInt("size") > 0) {
                 success = true;
@@ -164,13 +154,13 @@ class createUser extends AsyncTask<Void, Void, Boolean> {
     }
 }
 
-class deleteUser extends AsyncTask<Void, Void, Boolean> {
+class DeleteMenuTask extends AsyncTask<Void, Void, Boolean> {
 
-    UserDTO u;
+    ProductDTO p;
     boolean success;
 
-    public deleteUser(UserDTO u){
-        this.u = u;
+    public DeleteMenuTask(ProductDTO p){
+        this.p = p;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -179,8 +169,8 @@ class deleteUser extends AsyncTask<Void, Void, Boolean> {
         HttpHandler httpHandler = new HttpHandler();
         try{
             JSONObject formData = new JSONObject();
-            formData.put("id",u.getId());
-            String json = httpHandler.post(Constants.API_URL + "user/delete/", formData.toString());
+            formData.put("id",p.getId());
+            String json = httpHandler.post(Constants.API_URL + "product/delete/", formData.toString());
             JSONObject jsonObj = new JSONObject(json);
             if (!jsonObj.getBoolean("hasErr")) {
                 success = true;
@@ -202,26 +192,23 @@ class deleteUser extends AsyncTask<Void, Void, Boolean> {
     }
 }
 
-class UpdateFormUser extends AsyncTask<Void, Void, Boolean> {
+class UpdateFormMenuTask extends AsyncTask<Void, Void, Boolean> {
 
-    UserDTO u;
-    UserDTO u_i;
+    ProductDTO p;
+    ProductDTO p_i;
     IAsyncTaskHandler container;
     Activity activity;
 
-    public String uid;
-    public String fullname;
-    public String username;
-    public String password;
-    public String role_id;
-    public String ustatus;
-    public String userRoleName;
+    public String id;
+    public String name;
+    public String desc;
+    public String price;
 
 
-    public UpdateFormUser(IAsyncTaskHandler container ,UserDTO u){
+    public UpdateFormMenuTask(IAsyncTaskHandler container , ProductDTO p){
         this.container = container;
         activity = (Activity)container;
-        this.u = u;
+        this.p = p;
     }
 
     @Override
@@ -229,44 +216,31 @@ class UpdateFormUser extends AsyncTask<Void, Void, Boolean> {
         HttpHandler httpHandler = new HttpHandler();
         try{
 
-            String json = httpHandler.get(Constants.API_URL + "user/get/?id="+u.getId());
+            String json = httpHandler.get(Constants.API_URL + "product/get/?id="+p.getId());
             JSONObject jsonObj = new JSONObject(json);
-            JSONArray tables = jsonObj.getJSONArray("result");
+            JSONArray menus = jsonObj.getJSONArray("result");
 
-            JSONObject oneUser = tables.getJSONObject(0);
-            uid = oneUser.getString("id");
-            fullname = oneUser.getString("name");
-            username = oneUser.getString("username");
-            role_id = oneUser.getString("role_id");
-            ustatus = oneUser.getString("status");
-            userRoleName = oneUser.getString("role_name");
-            u_i = new UserDTO(Integer.parseInt(uid),fullname, username, "", Integer.parseInt(role_id), Integer.parseInt(ustatus));
+            JSONObject oneMenu = menus.getJSONObject(0);
+            id = oneMenu.getString("id");
+            name = oneMenu.getString("name");
+            desc = oneMenu.getString("description");
+            price = oneMenu.getString("price");
+            p_i = new ProductDTO(Integer.parseInt(id),name,Double.parseDouble(price), desc);
 
-            UserForm.up_u = u_i;
+            MenuForm.up_p = p_i;
 
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    UserForm.UserId = uid.toString();
-                    UserForm.UserFullName.setText(fullname.toString());
-                    UserForm.UserName.setText(username.toString());
-                    UserForm.UserRoleId = role_id.toString();
-                    UserForm.UserStt = ustatus.toString();
-                    UserForm.UserRoleNameString = userRoleName.toString();
-
-                    int currentPosition = UserForm.dataAdapter.getPosition(UserForm.UserRoleNameString);
-                    Log.e("position: ", ""+currentPosition);
-                    Log.e("position_name: ", ""+UserForm.UserRoleNameString);
-                    UserForm.UserRoleName.setSelection(currentPosition);
-
-                    if(ustatus.equals("0")) UserForm.UserStatus.setChecked(true);
-                    else UserForm.UserStatus.setChecked(false);
-
+                    MenuForm.id = id.toString();
+                    MenuForm.name.setText(name.toString());
+                    MenuForm.desc.setText(desc.toString());
+                    MenuForm.price.setText(price.toString());
                 }
             });
 
 
-            Log.e("PPP: ", UserForm.up_u.toString());
+            Log.e("PPP: ", MenuForm.up_p.toString());
 
 
         }catch (Exception ex){
@@ -278,21 +252,21 @@ class UpdateFormUser extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
-        Log.e("UpdateMenu: ", u_i.toString());
+        Log.e("UpdateMenu: ", p_i.toString());
     }
 }
 
-class UpdateUser extends AsyncTask<Void, Void, Boolean> {
+class Update extends AsyncTask<Void, Void, Boolean> {
 
     IAsyncTaskHandler container;
-    UserDTO u;
+    ProductDTO p;
     Activity activity;
     boolean success = false;
 
-    public UpdateUser(IAsyncTaskHandler container, UserDTO u){
+    public Update(IAsyncTaskHandler container, ProductDTO p){
         this.container = container;
         this.activity = (Activity)container;
-        this.u = u;
+        this.p = p;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -300,15 +274,13 @@ class UpdateUser extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground(Void... voids) {
         HttpHandler httpHandler = new HttpHandler();
         try{
-            Log.e("Update-Async", u.toString());
+            Log.e("Update-Async", p.toString());
             JSONObject formData = new JSONObject();
-            formData.put("id", u.getId());
-            formData.put("name", u.getName());
-            formData.put("username", u.getUsername());
-            formData.put("password", ""+ u.getPassword());
-            formData.put("role_id", ""+u.getRole_id());
-            formData.put("status",""+u.getStatus());
-            String json = httpHandler.post(Constants.API_URL + "user/update/", formData.toString());
+            formData.put("id",p.getId());
+            formData.put("name", p.getName());
+            formData.put("description", p.getDescription());
+            formData.put("price", ""+p.getPrice());
+            String json = httpHandler.post(Constants.API_URL + "product/update/", formData.toString());
             JSONObject jsonObj = new JSONObject(json);
             if (jsonObj.getInt("size") > 0) {
                 success = true;
