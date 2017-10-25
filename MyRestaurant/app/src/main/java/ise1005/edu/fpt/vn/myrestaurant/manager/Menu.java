@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetMenuTask;
+import ise1005.edu.fpt.vn.myrestaurant.asynctask.ManagerMenuTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
@@ -27,7 +27,7 @@ public class Menu extends AppCompatActivity implements IAsyncTaskHandler {
     ListView lv;
     EditText edtSearch;
     Button btnAdd;
-    GetMenuTask getMenus;
+    ManagerMenuTask getMenus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class Menu extends AppCompatActivity implements IAsyncTaskHandler {
 
         edtSearch.requestFocus();
 
-        getMenus = new GetMenuTask("get",edtSearch.getText().toString(), Menu.this, lv, null);
+        getMenus = new ManagerMenuTask("get",edtSearch.getText().toString(), Menu.this, lv, null);
 
 
         edtSearch.addTextChangedListener(new TextWatcher() {
@@ -57,7 +57,7 @@ public class Menu extends AppCompatActivity implements IAsyncTaskHandler {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                getMenus = new GetMenuTask("get",edtSearch.getText().toString(), Menu.this, lv, null);
+                getMenus = new ManagerMenuTask("get",edtSearch.getText().toString(), Menu.this, lv, null);
 
             }
 
@@ -96,9 +96,9 @@ public class Menu extends AppCompatActivity implements IAsyncTaskHandler {
                 ProductDTO p = new ProductDTO();
                 p.setId(Integer.parseInt(id));
                 try{
-                    new GetMenuTask("delete",null,null,null,p);
+                    new ManagerMenuTask("delete",null,null,null,p);
                     Log.e("Deleted: ", ""+p.getId());
-                    new GetMenuTask("get","", Menu.this, lv, null);
+                    new ManagerMenuTask("get","", Menu.this, lv, null);
                 }catch (Exception ex){
                     Log.e("Error:", ex.getMessage());
                 }
@@ -122,7 +122,7 @@ public class Menu extends AppCompatActivity implements IAsyncTaskHandler {
             if(resultCode == RESULT_OK) {
                 String result = data.getStringExtra("result");
                 Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-                new GetMenuTask("get","", Menu.this, lv, null);
+                new ManagerMenuTask("get","", Menu.this, lv, null);
             }
         }
     }

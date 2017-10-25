@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetTableTask;
+import ise1005.edu.fpt.vn.myrestaurant.asynctask.ManagerTableTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
@@ -27,7 +27,7 @@ public class Table extends AppCompatActivity implements IAsyncTaskHandler {
     ListView lv;
     EditText edtSearch;
     Button btnAdd;
-    GetTableTask getTableTask;
+    ManagerTableTask getTableTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class Table extends AppCompatActivity implements IAsyncTaskHandler {
 
         edtSearch.requestFocus();
 
-        getTableTask = new GetTableTask("get",edtSearch.getText().toString(), Table.this, lv, null);
+        getTableTask = new ManagerTableTask("get",edtSearch.getText().toString(), Table.this, lv, null);
 
 
         edtSearch.addTextChangedListener(new TextWatcher() {
@@ -57,7 +57,7 @@ public class Table extends AppCompatActivity implements IAsyncTaskHandler {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                getTableTask = new GetTableTask("get",edtSearch.getText().toString(), Table.this, lv, null);
+                getTableTask = new ManagerTableTask("get",edtSearch.getText().toString(), Table.this, lv, null);
 
             }
 
@@ -96,9 +96,9 @@ public class Table extends AppCompatActivity implements IAsyncTaskHandler {
                 TableDTO t = new TableDTO();
                 t.setId(Integer.parseInt(id));
                 try{
-                    new GetTableTask("delete",null,null,null,t);
+                    new ManagerTableTask("delete",null,null,null,t);
                     Log.e("Deleted: ", ""+t.getId());
-                    new GetTableTask("get","", Table.this, lv, null);
+                    new ManagerTableTask("get","", Table.this, lv, null);
                 }catch (Exception ex){
                     Log.e("Error:", ex.getMessage());
                 }
@@ -122,7 +122,7 @@ public class Table extends AppCompatActivity implements IAsyncTaskHandler {
             if(resultCode == RESULT_OK) {
                 String result = data.getStringExtra("result");
                 Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-                new GetTableTask("get","", Table.this, lv, null);
+                new ManagerTableTask("get","", Table.this, lv, null);
             }
         }
     }

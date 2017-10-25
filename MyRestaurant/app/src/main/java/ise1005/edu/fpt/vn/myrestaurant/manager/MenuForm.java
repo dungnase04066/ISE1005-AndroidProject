@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetMenuTask;
+import ise1005.edu.fpt.vn.myrestaurant.asynctask.ManagerMenuTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
@@ -113,7 +113,7 @@ public class MenuForm extends AppCompatActivity implements IAsyncTaskHandler {
         if(cancel){
             focusView.requestFocus();
         }else{
-            new GetMenuTask("create",null, MenuForm.this, null, p);
+            new ManagerMenuTask("create",null, MenuForm.this, null, p);
         }
 
 
@@ -157,7 +157,7 @@ public class MenuForm extends AppCompatActivity implements IAsyncTaskHandler {
             focusView.requestFocus();
         }else{
             Log.e("Update: ", p.toString());
-            new GetMenuTask("update",null, MenuForm.this, null, p);
+            new ManagerMenuTask("update",null, MenuForm.this, null, p);
         }
 
 
@@ -170,7 +170,7 @@ public class MenuForm extends AppCompatActivity implements IAsyncTaskHandler {
             ProductDTO p = new ProductDTO();
             p.setId(Integer.parseInt(up_pid));
 
-            new GetMenuTask("updateGetForm", null, MenuForm.this, null, p);
+            new ManagerMenuTask("updateGetForm", null, MenuForm.this, null, p);
 
 
         }catch (Exception ex){

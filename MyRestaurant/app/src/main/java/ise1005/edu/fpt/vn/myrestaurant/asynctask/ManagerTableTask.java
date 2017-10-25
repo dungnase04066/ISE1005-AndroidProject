@@ -28,16 +28,16 @@ import static android.app.Activity.RESULT_OK;
  * Created by sengx on 10/24/2017.
  */
 
-public class GetTableTask {
+public class ManagerTableTask {
 
-    public GetTableTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, TableDTO t) {
+    public ManagerTableTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, TableDTO t) {
 
         if (method.equals("get")) {
-            new getTable(txtSearch, container, lv).execute((Void) null);
+            new GetTableTask(txtSearch, container, lv).execute((Void) null);
         } else if (method.equals("create")) {
-            new createTable(container, t).execute((Void) null);
+            new CreateTableTask(container, t).execute((Void) null);
         } else if (method.equals("delete")) {
-            new deleteTable(t).execute((Void) null);
+            new DeleteTableTask(t).execute((Void) null);
         } else if (method.equals("updateGetForm")) {
             new UpdateFormTable(container, t).execute((Void) null);
         } else if (method.equals("update")) {
@@ -47,7 +47,7 @@ public class GetTableTask {
 
 }
 
-class getTable extends AsyncTask<Void, Void, Boolean> {
+class GetTableTask extends AsyncTask<Void, Void, Boolean> {
 
     private final String txtSearch;
     private final IAsyncTaskHandler container;
@@ -56,7 +56,7 @@ class getTable extends AsyncTask<Void, Void, Boolean> {
     private Activity activity;
     private ListView lv;
 
-    public getTable(String txtSearch, IAsyncTaskHandler container, ListView lv){
+    public GetTableTask(String txtSearch, IAsyncTaskHandler container, ListView lv){
         this.txtSearch = txtSearch;
         this.container = container;
         activity = (Activity)container;
@@ -102,14 +102,14 @@ class getTable extends AsyncTask<Void, Void, Boolean> {
     }
 }
 
-class createTable extends AsyncTask<Void, Void, Boolean> {
+class CreateTableTask extends AsyncTask<Void, Void, Boolean> {
 
     IAsyncTaskHandler container;
     TableDTO t;
     Activity activity;
     boolean success = false;
 
-    public createTable(IAsyncTaskHandler container, TableDTO t){
+    public CreateTableTask(IAsyncTaskHandler container, TableDTO t){
         this.container = container;
         this.activity = (Activity)container;
         this.t = t;
@@ -148,12 +148,12 @@ class createTable extends AsyncTask<Void, Void, Boolean> {
     }
 }
 
-class deleteTable extends AsyncTask<Void, Void, Boolean> {
+class DeleteTableTask extends AsyncTask<Void, Void, Boolean> {
 
     TableDTO t;
     boolean success;
 
-    public deleteTable(TableDTO t){
+    public DeleteTableTask(TableDTO t){
         this.t = t;
     }
 
