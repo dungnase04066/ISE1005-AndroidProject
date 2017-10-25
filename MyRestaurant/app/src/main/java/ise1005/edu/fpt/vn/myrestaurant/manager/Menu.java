@@ -16,11 +16,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetMenuTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
+import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
 
 public class Menu extends AppCompatActivity implements IAsyncTaskHandler {
@@ -34,6 +33,10 @@ public class Menu extends AppCompatActivity implements IAsyncTaskHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        if(Session.currentUser == null || Session.currentUser.getRole_id() != 1 || Session.currentUser.getStatus() != 0){
+            new CheckSession(this);
+        }
 
         lv = (ListView)findViewById(R.id.mMenuLv);
         edtSearch = (EditText)findViewById(R.id.mMenuEdtSearch);

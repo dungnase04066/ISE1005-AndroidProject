@@ -17,10 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetTableTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetUserTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
-import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
+import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.UserDTO;
 
 public class UserForm extends AppCompatActivity implements IAsyncTaskHandler {
@@ -47,6 +46,10 @@ public class UserForm extends AppCompatActivity implements IAsyncTaskHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_form);
+
+        if(Session.currentUser == null || Session.currentUser.getRole_id() != 1 || Session.currentUser.getStatus() != 0){
+            new CheckSession(this);
+        }
 
         UserFullName = (EditText)findViewById(R.id.mUserEdtName);
         UserName = (EditText)findViewById(R.id.mUserEdtUserName);
@@ -229,6 +232,7 @@ public class UserForm extends AppCompatActivity implements IAsyncTaskHandler {
             Log.e("Error: ", ex.getMessage());
         }
     }
+
 
     @Override
     public void onPostExecute(Object o) {

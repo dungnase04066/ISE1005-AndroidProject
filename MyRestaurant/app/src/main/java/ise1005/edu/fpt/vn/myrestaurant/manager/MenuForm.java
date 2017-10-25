@@ -11,6 +11,7 @@ import android.widget.EditText;
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetMenuTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
+import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
 
 public class MenuForm extends AppCompatActivity implements IAsyncTaskHandler {
@@ -33,6 +34,10 @@ public class MenuForm extends AppCompatActivity implements IAsyncTaskHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_form);
+
+        if(Session.currentUser == null || Session.currentUser.getRole_id() != 1 || Session.currentUser.getStatus() != 0){
+            new CheckSession(this);
+        }
 
         name = (EditText)findViewById(R.id.mMenuEdtName);
         desc = (EditText)findViewById(R.id.mMenuEdtDesc);

@@ -17,10 +17,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetMenuTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.GetTableTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
-import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
+import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
 
 public class Table extends AppCompatActivity implements IAsyncTaskHandler {
@@ -34,6 +33,10 @@ public class Table extends AppCompatActivity implements IAsyncTaskHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
+
+        if(Session.currentUser == null || Session.currentUser.getRole_id() != 1 || Session.currentUser.getStatus() != 0){
+            new CheckSession(this);
+        }
 
         lv = (ListView)findViewById(R.id.mTableLv);
         edtSearch = (EditText)findViewById(R.id.mTableEdtSearch);
