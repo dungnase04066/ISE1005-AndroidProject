@@ -18,7 +18,7 @@ import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.ProductListTask;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
 
-public class OrderForm extends AppCompatActivity implements IAsyncTaskHandler {
+public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler {
 
     ArrayList<ProductDTO> dataModels;
     ListView listView;
