@@ -9,6 +9,7 @@ public class OrderDetailDTO {
     private int order_id;
     private int product_id;
     private ProductDTO product;
+    private TableDTO table;
     private double price;
     private int quantity;
     private String note;
@@ -81,6 +82,14 @@ public class OrderDetailDTO {
         this.status = status;
     }
 
+    public TableDTO getTable() {
+        return table;
+    }
+
+    public void setTable(TableDTO table) {
+        this.table = table;
+    }
+
     @Override
     public String toString() {
         return "OrderDetailDTO{" +
@@ -88,6 +97,7 @@ public class OrderDetailDTO {
                 ", order_id=" + order_id +
                 ", product_id=" + product_id +
                 ", product=" + product +
+                ", table=" + table +
                 ", price=" + price +
                 ", quantity=" + quantity +
                 ", note='" + note + '\'' +
