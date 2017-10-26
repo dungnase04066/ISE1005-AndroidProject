@@ -24,7 +24,7 @@
         <activity android:name=".manager.TableForm" />
 
         <service
-            android:name=".notification.NotificationService"
+            android:name=".notification.Notification"
             android:enabled="true"
             android:exported="true" />
 

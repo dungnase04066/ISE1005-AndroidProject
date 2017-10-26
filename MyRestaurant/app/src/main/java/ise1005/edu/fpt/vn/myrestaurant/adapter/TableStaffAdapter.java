@@ -18,7 +18,7 @@ import ise1005.edu.fpt.vn.myrestaurant.staff.TableActivity;
  * Created by Administrator on 23-Oct-17.
  */
 
-public class TableStaffAdapter extends BaseAdapter{
+public class TableStaffAdapter extends BaseAdapter implements View.OnClickListener{
     private List<TableDTO> lstTable;
     private LayoutInflater layoutInflater;
 
@@ -65,6 +65,12 @@ public class TableStaffAdapter extends BaseAdapter{
         holder.status.setText(table.getStatus()+"");
         return view;
     }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
     static class ViewHolder{
         TextView name;
         TextView description;
