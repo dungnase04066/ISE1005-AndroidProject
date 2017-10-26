@@ -20,7 +20,6 @@ import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
 
 public class TableListTask extends AsyncTask<Void, Void, Boolean> {
     List<TableDTO> lstTable = new ArrayList<>();
-    String url = Constants.API_URL+"table/get/?status=0";
     private IAsyncTaskHandler container;
     private String name;
 
@@ -32,7 +31,7 @@ public class TableListTask extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground(Void... voids) {
         lstTable = new ArrayList<>();
         HttpHandler sh = new HttpHandler();
-        String jsonStr = sh.get(url);
+        String jsonStr = sh.get(name);
         if(jsonStr !=null) {
             try{
                 JSONObject jsonObject = new JSONObject(jsonStr);
@@ -42,7 +41,6 @@ public class TableListTask extends AsyncTask<Void, Void, Boolean> {
                     TableDTO table;
                     int id = result.getInt("id");
                     String name = result.getString("name");
-                    Log.d("111111",name);
                     String description = result.getString("description");
                     int status = result.getInt("status");
                     table = new TableDTO(id,name,description,status);

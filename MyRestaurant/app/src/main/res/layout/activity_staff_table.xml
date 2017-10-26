@@ -10,16 +10,14 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
         android:text="List Table"
         android:textSize="30sp"
         tools:layout_editor_absoluteX="120dp"
         tools:layout_editor_absoluteY="27dp"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/lstTable"
-        android:layout_alignEnd="@+id/lstTable"
-        android:layout_marginRight="104dp"
-        android:layout_marginEnd="104dp"
-        android:layout_marginTop="13dp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ListView
         android:id="@+id/lstTable"
@@ -27,6 +25,24 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/textView"
         android:layout_marginTop="65dp" />
+
+    <Spinner
+        android:id="@+id/status"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/status"
+        android:ems="10"
+        android:inputType="textPersonName" />
 
 
 </RelativeLayout>
