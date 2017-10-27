@@ -62,7 +62,10 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 OrderDetailDTO dataModel= dataModels.get(position);
-
+                Intent intent = new Intent(getApplicationContext(), UpdateOrderDetail.class);
+                intent.putExtra("orderDetailDTO", dataModel);
+                intent.putExtra("id", position);
+                startActivityForResult(intent, 2);
                 //Snackbar.make(view, dataModel.getName()+"\n"+dataModel.getDescription()+" Price: "+dataModel.getPrice(), Snackbar.LENGTH_LONG)
                        // .setAction("No action", null).show();
             }
@@ -73,17 +76,43 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
     public void onClick(View view) {
         int getWiget = view.getId();
         if(getWiget == R.id.mProductBtnAddItem){
-            Intent i = new Intent(this, FormOrder.class);
-            startActivityForResult(i, 1);
+            Intent intent = new Intent(this, FormOrder.class);
+
+            startActivityForResult(intent, 1);
         }
+        if(getWiget == R.id.mProductBtnSubmit){
+
+        }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getExtras();
+
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
-                String result=data.getStringExtra("result");
+                ProductDTO productDTO =(ProductDTO) bundle.getSerializable("productDTO");
+                OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
+                orderDetailDTO.setProduct(productDTO);
+                orderDetailDTO.setPrice(productDTO.getPrice());
+                orderDetailDTO.setQuantity(0);
+                orderDetailDTO.setProduct_id(productDTO.getId());
+                dataModels.add(orderDetailDTO);
+                onPostExecute(dataModels);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+
+        if (requestCode == 2) {
+            if(resultCode == Activity.RESULT_OK){
+                OrderDetailDTO orderDetailDTO =(OrderDetailDTO) bundle.getSerializable("orderDetailDTO");
+                int id = bundle.getInt("id");
+                dataModels.set(id,orderDetailDTO);
+                onPostExecute(dataModels);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result

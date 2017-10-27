@@ -132,10 +132,13 @@ public class ManagerOrderDetailTask {
             HttpHandler httpHandler = new HttpHandler();
             try{
                 JSONObject formData = new JSONObject();
-                //formData.put("name", p.getName());
-                //formData.put("description", p.getDescription());
-                formData.put("price", ""+p.getPrice());
-                String json = httpHandler.post(Constants.API_URL + "product/create/", formData.toString());
+//                formData.put("name", p.getName());
+//                formData.put("description", p.getDescription());
+//                formData.put("price", ""+p.getPrice());
+//                formData.put("name", p.getName());
+//                formData.put("description", p.getDescription());
+//                formData.put("price", ""+p.getPrice());
+                String json = httpHandler.post(Constants.API_URL + "orderdetail/create/", formData.toString());
                 JSONObject jsonObj = new JSONObject(json);
                 if (jsonObj.getInt("size") > 0) {
                     success = true;

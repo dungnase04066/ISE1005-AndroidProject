@@ -1,5 +1,7 @@
 package ise1005.edu.fpt.vn.myrestaurant.staff;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -18,18 +21,19 @@ import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.ProductListTask;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
 
-public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler {
+public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler,View.OnClickListener {
 
     ArrayList<ProductDTO> dataModels;
     ListView listView;
     private static ListProductAdapter adapter;
-
+    Button mProductBtnCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_form);
-
+        mProductBtnCancel = (Button) findViewById(R.id.mProductBtnCancel);
+        mProductBtnCancel.setOnClickListener(this);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
@@ -50,9 +54,12 @@ public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 ProductDTO dataModel= dataModels.get(position);
-
                 Snackbar.make(view, dataModel.getName()+"\n"+dataModel.getDescription()+" Price: "+dataModel.getPrice(), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("productDTO",dataModel);
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
             }
         });
     }
@@ -72,5 +79,15 @@ public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler {
         //}
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int getWiget = view.getId();
+        if(getWiget == R.id.mProductBtnCancel){
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED,returnIntent);
+            finish();
+        }
     }
 }
