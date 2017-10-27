@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.HttpHandler;
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
@@ -25,7 +27,7 @@ import ise1005.edu.fpt.vn.myrestaurant.dto.UserDTO;
 public class JSonHelper {
 
 
-    public static ProductDTO get(JSONObject obj){
+    public static ProductDTO get(JSONObject obj) {
         ProductDTO productDTO = new ProductDTO();
         try {
             productDTO.setDescription(obj.getString("description"));
@@ -40,13 +42,19 @@ public class JSonHelper {
         return null;
     }
 
-    public static JSONObject parseJsonOrderDetail(OrderDetailDTO orderDetailDTO) throws JSONException {
-        JSONObject formData = new JSONObject();
-        formData.put("product_id",orderDetailDTO.getProduct_id());
-        formData.put("price",orderDetailDTO.getPrice());
-        formData.put("quantity",orderDetailDTO.getQuantity());
-        formData.put("note",orderDetailDTO.getNote());
-        return formData;
+    public static JSONArray parseJsonOrderDetail(ArrayList<OrderDetailDTO> orderDetailDTO1) throws JSONException {
+    JSONArray formData1 = new JSONArray();
+        for (OrderDetailDTO orderDetailDTO :
+                orderDetailDTO1) {
+            JSONObject formData = new JSONObject();
+            formData.put("product_id", orderDetailDTO.getProduct_id());
+            formData.put("price", orderDetailDTO.getPrice());
+            formData.put("quantity", orderDetailDTO.getQuantity());
+            formData.put("note", orderDetailDTO.getNote());
+            formData1.put(formData);
+        }
+
+        return formData1;
     }
 
     public static JSONObject parseJsonOrder(OrderDTO orderDTO) throws JSONException {

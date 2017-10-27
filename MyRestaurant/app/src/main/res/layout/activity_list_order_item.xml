@@ -17,40 +17,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-
-
-            <Button
-                android:id="@+id/mProductBtnAddItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_weight="1"
-                android:text="Add Item" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="408dp"
-            android:orientation="horizontal"
-            android:layout_weight="0.23">
-
-            <ListView
-                android:id="@+id/mTableLv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/mProductBtnSearch"
-                android:footerDividersEnabled="false" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
             <Button
                 android:id="@+id/mProductBtnCancel"
                 android:layout_width="match_parent"
@@ -73,6 +39,38 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+
+            <Button
+                android:id="@+id/mProductBtnAddItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_weight="1"
+                android:text="Add Item" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="408dp"
+            android:layout_weight="0.23"
+            android:orientation="horizontal">
+
+            <ListView
+                android:id="@+id/mTableLv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/mProductBtnSearch"
+                android:footerDividersEnabled="false" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

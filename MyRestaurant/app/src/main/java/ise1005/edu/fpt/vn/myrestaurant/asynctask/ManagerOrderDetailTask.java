@@ -29,13 +29,13 @@ import static android.app.Activity.RESULT_OK;
 public class ManagerOrderDetailTask {
 
 
-    public ManagerOrderDetailTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, OrderDetailDTO p) {
+    public ManagerOrderDetailTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, OrderDetailDTO p, JSONArray jsonArray) {
 
         if(method.equals("get")){
             new getOrderDetail(txtSearch, container, lv).execute();
         }
         else if(method.equals("create")){
-            new createOrderDetail( container, p, txtSearch).execute();
+            new createOrderDetail( container, jsonArray, txtSearch).execute();
         }
         else if(method.equals("delete")){
             new deleteOrderDetail(p).execute((Void) null);
@@ -71,7 +71,7 @@ public class ManagerOrderDetailTask {
         protected Boolean doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
             try{
-                String json = httpHandler.get(Constants.API_URL + "orderdetail/get/?id=" + txtSearch);
+                String json = httpHandler.get(Constants.API_URL + "orderdetail/get/?table_id=" + txtSearch);
                 JSONObject jsonObj = new JSONObject(json);
                 JSONArray orderDetailResult = jsonObj.getJSONArray("result");
 
@@ -121,13 +121,13 @@ public class ManagerOrderDetailTask {
         Activity activity;
         boolean success = false;
         String tableID;
-
-        public createOrderDetail(IAsyncTaskHandler container, OrderDetailDTO p,String tableID){
+        JSONArray jsonArray;
+        public createOrderDetail(IAsyncTaskHandler container, JSONArray jsonArray,String tableID){
             this.container = container;
             this.activity = (Activity)container;
             this.p = p;
             this.tableID = tableID;
-
+            this.jsonArray = jsonArray;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -138,7 +138,7 @@ public class ManagerOrderDetailTask {
                 JSONObject formData = new JSONObject();
                 formData.put("user_id", Session.currentUser.getId());
                 formData.put("table_id",tableID);
-                formData.put("order_detail",JSonHelper.parseJsonOrderDetail(p).toString());
+                formData.put("order_detail",jsonArray);
                 String json = httpHandler.post(Constants.API_URL + "order/create/", formData.toString());
                 JSONObject jsonObj = new JSONObject(json);
                 if (jsonObj.getInt("size") > 0) {
