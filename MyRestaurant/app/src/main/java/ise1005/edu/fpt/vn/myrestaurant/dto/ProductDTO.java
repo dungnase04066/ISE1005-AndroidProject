@@ -1,12 +1,13 @@
 package ise1005.edu.fpt.vn.myrestaurant.dto;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by DungNA on 10/20/17.
  */
 
-public class ProductDTO {
+public class ProductDTO implements Serializable {
     private int id;
     private String name;
     private double price;

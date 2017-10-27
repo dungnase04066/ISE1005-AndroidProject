@@ -92,7 +92,7 @@ public class ListProductAdapter extends ArrayAdapter<ProductDTO> implements View
         viewHolder.txtName.setText(dataModel.getName());
         viewHolder.txtdescription.setText(dataModel.getDescription());
         viewHolder.txtprice.setText(dataModel.getPrice()+"");
-        viewHolder.txtQuantity.setText("10");
+        viewHolder.txtQuantity.setText("");
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
         // Return the completed view to render on screen

@@ -36,7 +36,7 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
     }
 
     public ListOrderDetailAdapter(ArrayList<OrderDetailDTO> dataSet, Context mContext) {
-        super(mContext, R.layout.row_item, dataSet);
+        super(mContext, R.layout.row_order_detail, dataSet);
         this.dataSet = dataSet;
         this.mContext = mContext;
     }
@@ -49,8 +49,10 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
 
         switch (v.getId()) {
             case R.id.item_info:
-                //Snackbar.make(v, "pick: " + dataModel.getName(), Snackbar.LENGTH_LONG)
-                        //.setAction("No action", null).show();
+                Snackbar.make(v, "Remove product: " + dataModel.getProduct().getName(), Snackbar.LENGTH_LONG)
+                        .setAction("No action", null).show();
+                dataSet.remove(position);
+                remove(dataModel);
                 break;
         }
 
@@ -71,7 +73,7 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
 
             viewHolder = new ListOrderDetailAdapter.ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.row_item, parent, false);
+            convertView = inflater.inflate(R.layout.row_order_detail, parent, false);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.name);
             viewHolder.txtdescription = (TextView) convertView.findViewById(R.id.description);
             viewHolder.txtprice = (TextView) convertView.findViewById(R.id.price_number);
@@ -89,10 +91,10 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
         result.startAnimation(animation);
         lastPosition = position;
 
-        //viewHolder.txtName.setText(dataModel.getName());
-        viewHolder.txtdescription.setText(dataModel.getNote());
-        viewHolder.txtprice.setText(dataModel.getPrice() + "");
-        viewHolder.txtQuantity.setText("10");
+        viewHolder.txtName.setText(dataModel.getProduct().getName());
+        viewHolder.txtdescription.setText(dataModel.getProduct().getName());
+        viewHolder.txtprice.setText(dataModel.getProduct().getPrice() + "");
+        viewHolder.txtQuantity.setText(dataModel.getQuantity()+"");
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
         // Return the completed view to render on screen

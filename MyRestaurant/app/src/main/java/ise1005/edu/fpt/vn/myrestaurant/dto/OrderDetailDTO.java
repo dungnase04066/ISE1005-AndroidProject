@@ -1,10 +1,12 @@
 package ise1005.edu.fpt.vn.myrestaurant.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by DungNA on 10/22/17.
  */
 
-public class OrderDetailDTO {
+public class OrderDetailDTO implements Serializable {
     private int id;
     private int order_id;
     private int product_id;

@@ -15,8 +15,15 @@
         android:roundIcon="@mipmap/ic_shop"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".util.LoginActivity">
+        <activity android:name=".util.LoginActivity" android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity
+            android:name=".util.LoginActivity"
+            android:noHistory="true"></activity>
         <activity android:name=".manager.User" />
         <activity android:name=".manager.UserForm" />
         <activity android:name=".manager.Menu" />
@@ -31,15 +38,13 @@
 
         <activity android:name=".staff.TableActivity" />
         <activity android:name=".staff.ListTable" />
-        <activity android:name=".staff.FormOrder"></activity>
-        <activity android:name=".staff.ListOrderItem"></activity>
-        <activity android:name=".cooker.CookerActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".staff.FormOrder" />
+        <activity android:name=".staff.ListOrderItem" />
+        <activity android:name=".manager.Dashboard"></activity>
+        <activity android:name=".staff.ListOrderItem">
         </activity>
+        <activity android:name=".manager.Dashboard" />
+        <activity android:name=".staff.UpdateOrderDetail"></activity>
     </application>
 
 </manifest>

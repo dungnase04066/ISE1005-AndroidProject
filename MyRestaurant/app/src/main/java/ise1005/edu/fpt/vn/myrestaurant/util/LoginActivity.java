@@ -3,14 +3,9 @@ package ise1005.edu.fpt.vn.myrestaurant.util;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,19 +13,20 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.UserLoginTask;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
+import ise1005.edu.fpt.vn.myrestaurant.manager.Dashboard;
+import ise1005.edu.fpt.vn.myrestaurant.manager.*;
+import ise1005.edu.fpt.vn.myrestaurant.manager.Menu;
+import ise1005.edu.fpt.vn.myrestaurant.notification.Notification;
+import ise1005.edu.fpt.vn.myrestaurant.staff.TableActivity;
 
 /**
  * A login screen that offers login via email/password.
@@ -46,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements IAsyncTaskHandle
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Log.i("onLoginActivityCreate", Session.currentUser != null ? Session.currentUser.toString() : "NULL");
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -135,13 +132,35 @@ public class LoginActivity extends AppCompatActivity implements IAsyncTaskHandle
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
+
     @Override
     public void onPostExecute(Object o) {
         showProgress(false);
         mAuthTask = null;
-        if(Boolean.TRUE.equals(o)){
-            Log.i("onPostExecute", Session.currentUser.toString());
-        }else{
+        if (Boolean.TRUE.equals(o)) {
+//            Notification notification= new Notification();
+//            notification.setEvent("eventName");
+//            Intent intent = new Intent(getBaseContext(), Notification.class);
+//            Bundle extras = new Bundle();
+//            extras.putString("eventName", "test");
+//            intent.putExtras(extras);
+//            startService(intent);
+//            startService(new Intent(getBaseContext(), Notification.class));
+//            Log.i("onPostExecute", Session.currentUser.toString());
+//            Intent intent = new Intent(this, NotificationService.class);
+//            startService(intent);
+            if(Session.currentUser.getStatus() == 0){
+                if(Session.currentUser.getRole_id()==1){
+                    startActivity( new Intent(this, Dashboard.class));
+                }else if(Session.currentUser.getRole_id()==3){
+                    startActivity( new Intent(this, TableActivity.class));
+                }
+            }else{
+                mPasswordView.setError(getString(R.string.error_account_disabled));
+                mPasswordView.requestFocus();
+            }
+
+        } else {
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             mPasswordView.requestFocus();
         }
