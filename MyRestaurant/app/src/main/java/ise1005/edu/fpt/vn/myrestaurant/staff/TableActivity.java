@@ -46,8 +46,10 @@ public class TableActivity extends AppCompatActivity implements IAsyncTaskHandle
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 TableDTO o = (TableDTO) parent.getItemAtPosition(position);
                 Toast.makeText(getApplicationContext(),o.getId()+"",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(TableActivity.this, OrderForm.class);
-                startActivity(intent);
+                Intent intent = new Intent(TableActivity.this, ListOrderItem.class);
+                intent.putExtra("table_id", o.getId());
+//                Intent intent = new Intent(TableActivity.this, OrderForm.class);
+//                startActivity(intent);
             }
         });
         try {
