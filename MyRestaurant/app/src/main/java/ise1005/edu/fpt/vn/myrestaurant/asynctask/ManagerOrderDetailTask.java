@@ -14,8 +14,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import ise1005.edu.fpt.vn.myrestaurant.apihelper.ProductJSon;
+import ise1005.edu.fpt.vn.myrestaurant.apihelper.JSonHelper;
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
+import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.OrderDetailDTO;
 import ise1005.edu.fpt.vn.myrestaurant.manager.MenuForm;
 
@@ -34,7 +35,7 @@ public class ManagerOrderDetailTask {
             new getOrderDetail(txtSearch, container, lv).execute();
         }
         else if(method.equals("create")){
-            new createOrderDetail( container, p).execute((Void) null);
+            new createOrderDetail( container, p, txtSearch).execute();
         }
         else if(method.equals("delete")){
             new deleteOrderDetail(p).execute((Void) null);
@@ -95,7 +96,7 @@ public class ManagerOrderDetailTask {
                     orderDetailDTO.setProduct_id(Integer.parseInt(product_id));
                     orderDetailDTO.setQuantity(Integer.parseInt(quantity));
                     orderDetailDTO.setPrice(Double.parseDouble(price));
-                    orderDetailDTO.setProduct(ProductJSon.get(productResult));
+                    orderDetailDTO.setProduct(JSonHelper.get(productResult));
 
                     lstMenus.add(orderDetailDTO);
                 }
@@ -119,11 +120,14 @@ public class ManagerOrderDetailTask {
         OrderDetailDTO p;
         Activity activity;
         boolean success = false;
+        String tableID;
 
-        public createOrderDetail(IAsyncTaskHandler container, OrderDetailDTO p){
+        public createOrderDetail(IAsyncTaskHandler container, OrderDetailDTO p,String tableID){
             this.container = container;
             this.activity = (Activity)container;
             this.p = p;
+            this.tableID = tableID;
+
         }
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -132,13 +136,10 @@ public class ManagerOrderDetailTask {
             HttpHandler httpHandler = new HttpHandler();
             try{
                 JSONObject formData = new JSONObject();
-//                formData.put("name", p.getName());
-//                formData.put("description", p.getDescription());
-//                formData.put("price", ""+p.getPrice());
-//                formData.put("name", p.getName());
-//                formData.put("description", p.getDescription());
-//                formData.put("price", ""+p.getPrice());
-                String json = httpHandler.post(Constants.API_URL + "orderdetail/create/", formData.toString());
+                formData.put("user_id", Session.currentUser.getId());
+                formData.put("table_id",tableID);
+                formData.put("order_detail",JSonHelper.parseJsonOrderDetail(p).toString());
+                String json = httpHandler.post(Constants.API_URL + "order/create/", formData.toString());
                 JSONObject jsonObj = new JSONObject(json);
                 if (jsonObj.getInt("size") > 0) {
                     success = true;

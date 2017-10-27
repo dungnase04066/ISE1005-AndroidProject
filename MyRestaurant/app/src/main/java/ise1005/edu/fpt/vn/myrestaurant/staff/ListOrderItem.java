@@ -27,7 +27,10 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
     ListView listView;
     private static ListOrderDetailAdapter adapter;
     String id;
+    String tableID;
     Button mProductBtnAddItem;
+    Button mProductBtnSummitItem;
+    Button mProductBtnCancelItem;
 
 
     @Override
@@ -36,6 +39,13 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         setContentView(R.layout.activity_list_order_item);
         mProductBtnAddItem = (Button)findViewById(R.id.mProductBtnAddItem);
         mProductBtnAddItem.setOnClickListener(this);
+
+        mProductBtnCancelItem = (Button) findViewById(R.id.mProductBtnCancel);
+        mProductBtnCancelItem.setOnClickListener(this);
+
+        mProductBtnSummitItem = (Button) findViewById(R.id.mProductBtnSubmit);
+        mProductBtnSummitItem.setOnClickListener(this);
+
         listView=(ListView)findViewById(R.id.mTableLv);
 
 
@@ -45,9 +55,12 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         if(b!=null)
         {
             this.id  =(String) b.get("id");
-
+            this.tableID = (String) b.get("table_id");
+        }else{
+            this.id = "1";
+            this.tableID = "2";
         }
-        ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("get",1+"",this,listView, null);
+        ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("get",this.id,this,listView, null);
 
     }
 
@@ -79,9 +92,19 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
             Intent intent = new Intent(this, FormOrder.class);
 
             startActivityForResult(intent, 1);
+            return;
         }
         if(getWiget == R.id.mProductBtnSubmit){
+            for ( OrderDetailDTO orderDetailDTO: dataModels) {
+                ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("create",tableID,this,listView, orderDetailDTO);
+            }
+            return;
+        }
 
+        if(getWiget == R.id.mProductBtnCancel){
+            Intent intent = new Intent(this, TableActivity.class);
+            startActivity(intent);
+            return;
         }
 
     }
@@ -97,7 +120,7 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
                 OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
                 orderDetailDTO.setProduct(productDTO);
                 orderDetailDTO.setPrice(productDTO.getPrice());
-                orderDetailDTO.setQuantity(0);
+                orderDetailDTO.setQuantity(1);
                 orderDetailDTO.setProduct_id(productDTO.getId());
                 dataModels.add(orderDetailDTO);
                 onPostExecute(dataModels);

@@ -50,7 +50,7 @@
                 android:id="@+id/mlQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.31"
+                android:layout_weight="1"
                 android:text="Quantity"
                 android:textSize="18sp" />
 
@@ -58,7 +58,7 @@
                 android:id="@+id/mQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.80"
                 android:ems="10"
                 />
         </LinearLayout>
@@ -80,9 +80,8 @@
                 android:id="@+id/mNote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                 />
+                android:layout_weight="0.53"
+                android:ems="10" />
         </LinearLayout>
 
         <LinearLayout
