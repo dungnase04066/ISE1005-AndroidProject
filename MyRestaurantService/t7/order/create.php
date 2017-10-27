@@ -16,6 +16,13 @@ if(isset($_POST['user_id']) && isset($_POST['table_id']) && isset($_POST['order_
             $order_detail['note'] = trim($mysqli->real_escape_string($order_detail['note']));
             $sql = "INSERT INTO `order_detail` (`order_id`, `product_id`, `price`, `quantity`, `note`) VALUES ({$order_id},{$order_detail['product_id']},{$order_detail['price']},{$order_detail['quantity']},'{$order_detail['note']}')";
             $mysqli->query($sql);
+            if(!$mysqli->connect_errno){
+                $outp['hasErr'] = false;
+                $outp['result'] = array('message'=>'Create success');
+            }else{
+                $outp['hasErr'] = true;
+                $outp['result'] = array('message'=>'Create unsuccess');
+            }
         }
     }else{
         $outp['result'] = array('message'=>'System fail');
