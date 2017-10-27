@@ -26,6 +26,7 @@ import ise1005.edu.fpt.vn.myrestaurant.manager.Dashboard;
 import ise1005.edu.fpt.vn.myrestaurant.manager.*;
 import ise1005.edu.fpt.vn.myrestaurant.manager.Menu;
 import ise1005.edu.fpt.vn.myrestaurant.notification.Notification;
+import ise1005.edu.fpt.vn.myrestaurant.staff.TableActivity;
 
 /**
  * A login screen that offers login via email/password.
@@ -148,10 +149,17 @@ public class LoginActivity extends AppCompatActivity implements IAsyncTaskHandle
 //            Log.i("onPostExecute", Session.currentUser.toString());
 //            Intent intent = new Intent(this, NotificationService.class);
 //            startService(intent);
-            if(Session.currentUser.getStatus() == 0 && Session.currentUser.getRole_id()==1){
-                Intent intent = new Intent(this, Dashboard.class);
-                startActivity(intent);
+            if(Session.currentUser.getStatus() == 0){
+                if(Session.currentUser.getRole_id()==1){
+                    startActivity( new Intent(this, Dashboard.class));
+                }else if(Session.currentUser.getRole_id()==3){
+                    startActivity( new Intent(this, TableActivity.class));
+                }
+            }else{
+                mPasswordView.setError(getString(R.string.error_account_disabled));
+                mPasswordView.requestFocus();
             }
+
         } else {
             mPasswordView.setError(getString(R.string.error_incorrect_password));
             mPasswordView.requestFocus();
