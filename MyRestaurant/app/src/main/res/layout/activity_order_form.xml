@@ -59,34 +59,36 @@
                 android:layout_below="@+id/mProductBtnSearch"
                 android:footerDividersEnabled="false" />
         </LinearLayout>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/mProductBtnCancel"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="100dp"
+            android:clickable="true"
+            android:layout_gravity="bottom"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:fabSize="mini"
+            app:srcCompat="@android:drawable/ic_menu_revert" />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/mProductBtnCancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_weight="1"
-                android:text="Back to Order List" />
+
 
             <!--<Button-->
-                <!--android:id="@+id/mProductBtnSubmit"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_alignParentTop="true"-->
-                <!--android:layout_weight="1"-->
-                <!--android:text="Submit" />-->
+            <!--android:id="@+id/mProductBtnSubmit"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Submit" />-->
 
         </LinearLayout>
-
-
     </LinearLayout>
 
 </RelativeLayout>

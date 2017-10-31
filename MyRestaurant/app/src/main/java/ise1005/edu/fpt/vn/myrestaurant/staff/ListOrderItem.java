@@ -41,6 +41,7 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
     FloatingActionButton mProductBtnSummitItem;
     FloatingActionButton mProductBtnCancelItem;
     FloatingActionButton mProductBtnAddItem;
+    FloatingActionButton mProductBtnPay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,9 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
 
         mProductBtnSummitItem = (FloatingActionButton) findViewById(R.id.mProductBtnSubmit);
         mProductBtnSummitItem.setOnClickListener(this);
+
+        mProductBtnPay = (FloatingActionButton) findViewById(R.id.mProductBtnPay);
+        mProductBtnPay.setOnClickListener(this);
 
         listView = (ListView) findViewById(R.id.mTableLv);
 
@@ -96,7 +100,6 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         int getWiget = view.getId();
         if (getWiget == R.id.floatingActionButton2) {
             Intent intent = new Intent(this, FormOrder.class);
-
             startActivityForResult(intent, 1);
             return;
         }
@@ -122,6 +125,26 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
             return;
         }
 
+        if (getWiget == R.id.mProductBtnPay){
+
+            Intent intent = new Intent(this, PayForm.class);
+            intent.putExtra("listPay",getListPay());
+            startActivity(intent);
+        }
+
+    }
+
+    public String getListPay(){
+        StringBuffer listPay = new StringBuffer();
+        double summeryTotal = 0;
+        for ( OrderDetailDTO orderDetail : dataModels) {
+            double total = orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
+            listPay.append(orderDetail.getProduct().getName()+ " * " + orderDetail.getQuantity() + " \t= " + total+"vnd\n");
+            summeryTotal += total;
+        }
+        listPay.append("=============================\n");
+        listPay.append("==>Total: "+summeryTotal+"vnd");
+        return listPay.toString();
     }
 
     @Override

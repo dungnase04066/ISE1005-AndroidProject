@@ -2,6 +2,7 @@ package ise1005.edu.fpt.vn.myrestaurant.staff;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,13 +27,13 @@ public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler,Vi
     ArrayList<ProductDTO> dataModels;
     ListView listView;
     private static ListProductAdapter adapter;
-    Button mProductBtnCancel;
+    FloatingActionButton mProductBtnCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_form);
-        mProductBtnCancel = (Button) findViewById(R.id.mProductBtnCancel);
+        mProductBtnCancel = (FloatingActionButton) findViewById(R.id.mProductBtnCancel);
         mProductBtnCancel.setOnClickListener(this);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);

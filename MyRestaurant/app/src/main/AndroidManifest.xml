@@ -15,9 +15,12 @@
         android:roundIcon="@mipmap/ic_shop"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".util.LoginActivity" android:noHistory="true">
+        <activity
+            android:name=".util.LoginActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,7 +41,8 @@
         <activity android:name=".staff.FormOrder" />
         <activity android:name=".staff.ListOrderItem" />
         <activity android:name=".manager.Dashboard" />
-        <activity android:name=".staff.UpdateOrderDetail"></activity>
+        <activity android:name=".staff.UpdateOrderDetail" />
+        <activity android:name=".staff.PayForm"></activity>
     </application>
 
 </manifest>
