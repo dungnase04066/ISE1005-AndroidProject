@@ -5,7 +5,7 @@ package ise1005.edu.fpt.vn.myrestaurant.config;
  */
 
 public class Constants {
-    public static final String API_URL = "http://10.0.3.2:8888/";
+    public static final String API_URL = "http://10.0.3.2/";
     public static final String PUSHER_KEY = "ff3ea1c0573eb96b7ae2";
     public static final String PUSHER_CHANNEL = "ISE1005";
     public static final String PUSHER_EVENT_FOR_COOKER = "MYRESTAURANT_COOKER";
