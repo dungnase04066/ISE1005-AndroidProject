@@ -47,13 +47,17 @@ public class JSonHelper {
         for (OrderDetailDTO orderDetailDTO :
                 orderDetailDTO1) {
             JSONObject formData = new JSONObject();
+            if(orderDetailDTO.getOrder_id() >-1) {
+                formData.put("order_id", orderDetailDTO.getId());
+            }
             formData.put("product_id", orderDetailDTO.getProduct_id());
             formData.put("price", orderDetailDTO.getPrice());
             formData.put("quantity", orderDetailDTO.getQuantity());
             formData.put("note", orderDetailDTO.getNote());
             formData1.put(formData);
-        }
 
+        }
+        Log.d("ListorderDetail:",formData1.toString());
         return formData1;
     }
 

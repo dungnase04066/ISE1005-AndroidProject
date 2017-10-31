@@ -2,6 +2,7 @@ package ise1005.edu.fpt.vn.myrestaurant.staff;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.adapter.ListOrderDetailAdapter;
@@ -34,22 +37,22 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
     private static ListOrderDetailAdapter adapter;
     String id;
     String tableID;
-    Button mProductBtnAddItem;
-    Button mProductBtnSummitItem;
-    Button mProductBtnCancelItem;
-
+    //Button mProductBtnAddItem;
+    FloatingActionButton mProductBtnSummitItem;
+    FloatingActionButton mProductBtnCancelItem;
+    FloatingActionButton mProductBtnAddItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_order_item);
-        mProductBtnAddItem = (Button) findViewById(R.id.mProductBtnAddItem);
+        mProductBtnAddItem = (FloatingActionButton) findViewById(R.id.floatingActionButton2);
         mProductBtnAddItem.setOnClickListener(this);
 
-        mProductBtnCancelItem = (Button) findViewById(R.id.mProductBtnCancel);
+        mProductBtnCancelItem = (FloatingActionButton) findViewById(R.id.mProductBtnCancel);
         mProductBtnCancelItem.setOnClickListener(this);
 
-        mProductBtnSummitItem = (Button) findViewById(R.id.mProductBtnSubmit);
+        mProductBtnSummitItem = (FloatingActionButton) findViewById(R.id.mProductBtnSubmit);
         mProductBtnSummitItem.setOnClickListener(this);
 
         listView = (ListView) findViewById(R.id.mTableLv);
@@ -59,13 +62,12 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         Bundle b = iin.getExtras();
 
         if (b != null) {
-            this.id = "0";//(String) b.get("id");
             this.tableID = (String) b.getString("table_id");
         } else {
             this.id = "1";
             this.tableID = "2";
         }
-        ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("get", this.tableID, this, listView, null,null);
+        ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("get", this.tableID, this, listView, null,null,null);
 
     }
 
@@ -92,7 +94,7 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
     @Override
     public void onClick(View view) {
         int getWiget = view.getId();
-        if (getWiget == R.id.mProductBtnAddItem) {
+        if (getWiget == R.id.floatingActionButton2) {
             Intent intent = new Intent(this, FormOrder.class);
 
             startActivityForResult(intent, 1);
@@ -100,7 +102,14 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         }
         if (getWiget == R.id.mProductBtnSubmit) {
             try {
-                ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("create", tableID, this, listView, null,JSonHelper.parseJsonOrderDetail(dataModels));
+                HashMap mapValue = new HashMap();
+                try {
+                    //if not null then mapVlaue must be equal the first element array
+                    mapValue.put("id",dataModels.get(0).getOrder_id());
+                }catch (Exception e){
+                }
+                mapValue.put("tableID",tableID);
+                ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("create", tableID, this, listView, null,JSonHelper.parseJsonOrderDetail(dataModels),mapValue);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -123,12 +132,22 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 ProductDTO productDTO = (ProductDTO) bundle.getSerializable("productDTO");
-                OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
-                orderDetailDTO.setProduct(productDTO);
-                orderDetailDTO.setPrice(productDTO.getPrice());
-                orderDetailDTO.setQuantity(1);
-                orderDetailDTO.setProduct_id(productDTO.getId());
-                dataModels.add(orderDetailDTO);
+                int index = findDuplicate(dataModels,productDTO);
+                OrderDetailDTO orderDetailDTO;
+                if(index ==-1 ){
+                    orderDetailDTO = new OrderDetailDTO();
+                    orderDetailDTO.setProduct(productDTO);
+                    orderDetailDTO.setPrice(productDTO.getPrice());
+                    orderDetailDTO.setQuantity(1);
+                    orderDetailDTO.setProduct_id(productDTO.getId());
+                    orderDetailDTO.setOrder_id(-1);
+                    dataModels.add(orderDetailDTO);
+                }else{
+                    orderDetailDTO = dataModels.get(index);
+                    orderDetailDTO.setQuantity(orderDetailDTO.getQuantity()+1);
+                    orderDetailDTO.setProduct_id(productDTO.getId());
+                    dataModels.set(index,orderDetailDTO);
+                }
                 onPostExecute(dataModels);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -147,5 +166,14 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
                 //Write your code if there's no result
             }
         }
+    }
+
+    public int findDuplicate(ArrayList<OrderDetailDTO> dataModels,ProductDTO productDTO){
+        for (int index =0, length = dataModels.size(); index < length; index++){
+            if(dataModels.get(index).getProduct().getId() == productDTO.getId()){
+                return index;
+            }
+        }
+        return -1;
     }
 }

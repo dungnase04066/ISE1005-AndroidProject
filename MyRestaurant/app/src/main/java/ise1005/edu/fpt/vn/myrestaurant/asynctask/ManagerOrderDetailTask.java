@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ise1005.edu.fpt.vn.myrestaurant.apihelper.JSonHelper;
@@ -29,13 +30,13 @@ import static android.app.Activity.RESULT_OK;
 public class ManagerOrderDetailTask {
 
 
-    public ManagerOrderDetailTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, OrderDetailDTO p, JSONArray jsonArray) {
+    public ManagerOrderDetailTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, OrderDetailDTO p, JSONArray jsonArray, HashMap<String,Object> mapValue) {
 
         if(method.equals("get")){
             new getOrderDetail(txtSearch, container, lv).execute();
         }
         else if(method.equals("create")){
-            new createOrderDetail( container, jsonArray, txtSearch).execute();
+            new createOrderDetail( container, jsonArray, mapValue).execute();
         }
         else if(method.equals("delete")){
             new deleteOrderDetail(p).execute((Void) null);
@@ -50,15 +51,14 @@ public class ManagerOrderDetailTask {
 
     class getOrderDetail extends AsyncTask<Void, Void, Boolean> {
 
-        private final String txtSearch;
+        private final String table_id;
         private final IAsyncTaskHandler container;
-        private final List<OrderDetailDTO> lstMenus;
-        private JSONObject oneMenu;
+        private List<OrderDetailDTO> lstMenus;
         private Activity activity;
         private ListView lv;
 
         public getOrderDetail(String txtSearch, IAsyncTaskHandler container, ListView lv){
-            this.txtSearch = txtSearch;
+            this.table_id = txtSearch;
             this.container = container;
             activity = (Activity)container;
             lstMenus = new ArrayList<OrderDetailDTO>();
@@ -71,18 +71,15 @@ public class ManagerOrderDetailTask {
         protected Boolean doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
             try{
-                String json = httpHandler.get(Constants.API_URL + "orderdetail/get/?table_id=" + txtSearch);
+                String json = httpHandler.get(Constants.API_URL + "orderdetail/get/?table_id=" + table_id);
                 JSONObject jsonObj = new JSONObject(json);
                 JSONArray orderDetailResult = jsonObj.getJSONArray("result");
-
-
-
                 lstMenus.clear();
 
                 for(int i=0;i<orderDetailResult.length();i++){
-                    oneMenu = orderDetailResult.getJSONObject(i);
+                    JSONObject oneMenu = orderDetailResult.getJSONObject(i);
                     String id = oneMenu.getString("id");
-                    String orderId = oneMenu.getString("order_id");
+                    String orderId = intiOrderID(table_id);
                     String product_id = oneMenu.getString("product_id");
                     String quantity = oneMenu.getString("quantity");
                     String price = oneMenu.getString("price");
@@ -112,6 +109,24 @@ public class ManagerOrderDetailTask {
             super.onPostExecute(aBoolean);
             container.onPostExecute(lstMenus);
         }
+
+        public String intiOrderID(String tableID){
+            HttpHandler httpHandler = new HttpHandler();
+            try{
+                String json = httpHandler.get(Constants.API_URL + "order/get/?table_id=" + tableID +"&status=0");
+                JSONObject jsonObj = new JSONObject(json);
+                JSONArray orderDetailResult = jsonObj.getJSONArray("result");
+                lstMenus.clear();
+                if (jsonObj.getInt("size") > 0 ){
+                    JSONObject oneMenu = orderDetailResult.getJSONObject(0);
+                    return oneMenu.getString("id");
+                }
+            }catch (Exception ex){
+                Log.e("Error:", ex.getMessage());
+            }
+            return "-1";
+        }
+
     }
 
     class createOrderDetail extends AsyncTask<Void, Void, Boolean> {
@@ -122,11 +137,12 @@ public class ManagerOrderDetailTask {
         boolean success = false;
         String tableID;
         JSONArray jsonArray;
-        public createOrderDetail(IAsyncTaskHandler container, JSONArray jsonArray,String tableID){
+        HashMap<String,Object> mapValue;
+
+        public createOrderDetail(IAsyncTaskHandler container, JSONArray jsonArray,HashMap<String,Object> mapValue){
             this.container = container;
             this.activity = (Activity)container;
-            this.p = p;
-            this.tableID = tableID;
+            this.mapValue = mapValue;
             this.jsonArray = jsonArray;
         }
 
@@ -136,15 +152,18 @@ public class ManagerOrderDetailTask {
             HttpHandler httpHandler = new HttpHandler();
             try{
                 JSONObject formData = new JSONObject();
+                if(!mapValue.get("id").toString().equals("-1")) {
+                    formData.put("id", mapValue.get("id"));
+                }
                 formData.put("user_id", Session.currentUser.getId());
-                formData.put("table_id",tableID);
+                formData.put("table_id",mapValue.get("tableID"));
                 formData.put("order_detail",jsonArray);
                 String json = httpHandler.post(Constants.API_URL + "order/create/", formData.toString());
                 JSONObject jsonObj = new JSONObject(json);
                 if (jsonObj.getInt("size") > 0) {
                     success = true;
                 }
-
+                Log.d("order",formData.toString());
             }catch (Exception ex){
                 Log.e("Error:", ex.getMessage());
             }
