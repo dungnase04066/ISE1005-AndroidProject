@@ -7,11 +7,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -22,12 +25,13 @@ import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.ProductListTask;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
 
-public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler,View.OnClickListener {
+public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler,View.OnClickListener,TextWatcher {
 
     ArrayList<ProductDTO> dataModels;
     ListView listView;
     private static ListProductAdapter adapter;
     FloatingActionButton mProductBtnCancel;
+    EditText inputdata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,8 @@ public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler,Vi
         setContentView(R.layout.activity_order_form);
         mProductBtnCancel = (FloatingActionButton) findViewById(R.id.mProductBtnCancel);
         mProductBtnCancel.setOnClickListener(this);
+        inputdata = (EditText) findViewById(R.id.mProductEdtSearch);
+        inputdata.addTextChangedListener(this);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
@@ -91,5 +97,22 @@ public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler,Vi
             setResult(Activity.RESULT_CANCELED,returnIntent);
             finish();
         }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        String input = inputdata.getText().toString().trim().toLowerCase();
+        ProductListTask productListTask = new ProductListTask(this,input);
+        productListTask.execute();
     }
 }

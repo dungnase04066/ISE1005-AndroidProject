@@ -38,8 +38,8 @@ public class ManagerOrderDetailTask {
         else if(method.equals("create")){
             new createOrderDetail( container, jsonArray, mapValue).execute();
         }
-        else if(method.equals("delete")){
-            new deleteOrderDetail(p).execute((Void) null);
+        else if(method.equals("close")){
+            new closeOrder(txtSearch).execute((Void) null);
         }
         else if(method.equals("updateGetForm")){
             new UpdateOrderDetail(container, p).execute((Void) null);
@@ -53,7 +53,7 @@ public class ManagerOrderDetailTask {
 
         private final String table_id;
         private final IAsyncTaskHandler container;
-        private List<OrderDetailDTO> lstMenus;
+        private ArrayList<OrderDetailDTO> lstMenus;
         private Activity activity;
         private ListView lv;
 
@@ -98,6 +98,7 @@ public class ManagerOrderDetailTask {
                     lstMenus.add(orderDetailDTO);
                 }
 
+
             }catch (Exception ex){
                 Log.e("Error:", ex.getMessage());
             }
@@ -116,7 +117,7 @@ public class ManagerOrderDetailTask {
                 String json = httpHandler.get(Constants.API_URL + "order/get/?table_id=" + tableID +"&status=0");
                 JSONObject jsonObj = new JSONObject(json);
                 JSONArray orderDetailResult = jsonObj.getJSONArray("result");
-                lstMenus.clear();
+
                 if (jsonObj.getInt("size") > 0 ){
                     JSONObject oneMenu = orderDetailResult.getJSONObject(0);
                     return oneMenu.getString("id");
@@ -150,15 +151,20 @@ public class ManagerOrderDetailTask {
         @Override
         protected Boolean doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
+            String urlAPI = Constants.API_URL;
             try{
                 JSONObject formData = new JSONObject();
-                if(!mapValue.get("id").toString().equals("-1")) {
+                if(mapValue.get("id").toString().equals("-1")) {
+
+                    urlAPI += "order/create/";
+                }else{
                     formData.put("id", mapValue.get("id"));
+                    urlAPI += "order/update/";
                 }
                 formData.put("user_id", Session.currentUser.getId());
                 formData.put("table_id",mapValue.get("tableID"));
                 formData.put("order_detail",jsonArray);
-                String json = httpHandler.post(Constants.API_URL + "order/create/", formData.toString());
+                String json = httpHandler.post(urlAPI, formData.toString());
                 JSONObject jsonObj = new JSONObject(json);
                 if (jsonObj.getInt("size") > 0) {
                     success = true;
@@ -173,38 +179,36 @@ public class ManagerOrderDetailTask {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            Intent intent = new Intent();
-            if(success)
-                intent.putExtra("result", "success!");
-            else
-                intent.putExtra("result", "failed");
-            this.activity.setResult(RESULT_OK, intent);
-            this.activity.finish();
+
         }
     }
 
-    class deleteOrderDetail extends AsyncTask<Void, Void, Boolean> {
+    class closeOrder extends AsyncTask<Void, Void, Boolean> {
 
-        OrderDetailDTO p;
+        String table_id;
         boolean success;
 
-        public deleteOrderDetail(OrderDetailDTO p){
-            this.p = p;
+        public closeOrder(String table_id){
+            this.table_id = table_id;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected Boolean doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
+            String urlAPI = Constants.API_URL+"order/close/";
             try{
                 JSONObject formData = new JSONObject();
-                formData.put("id",p.getId());
-                String json = httpHandler.post(Constants.API_URL + "product/delete/", formData.toString());
+
+                formData.put("order_id", intiOrderID(table_id));
+
+                formData.put("status", "1");
+                String json = httpHandler.post(urlAPI, formData.toString());
                 JSONObject jsonObj = new JSONObject(json);
-                if (!jsonObj.getBoolean("hasErr")) {
+                if (jsonObj.getInt("size") > 0) {
                     success = true;
                 }
-
+                Log.d("order",formData.toString());
             }catch (Exception ex){
                 Log.e("Error:", ex.getMessage());
             }
@@ -218,6 +222,22 @@ public class ManagerOrderDetailTask {
                 Log.e("Result: ", "YES!");
             else
                 Log.e("Result: ", "Nah!");
+        }
+
+        public String intiOrderID(String tableID){
+            HttpHandler httpHandler = new HttpHandler();
+            try{
+                String json = httpHandler.get(Constants.API_URL + "order/get/?table_id=" + tableID +"&status=0");
+                JSONObject jsonObj = new JSONObject(json);
+                JSONArray orderDetailResult = jsonObj.getJSONArray("result");
+                if (jsonObj.getInt("size") > 0 ){
+                    JSONObject oneMenu = orderDetailResult.getJSONObject(0);
+                    return oneMenu.getString("id");
+                }
+            }catch (Exception ex){
+                Log.e("Error:", ex.getMessage());
+            }
+            return "-1";
         }
     }
 

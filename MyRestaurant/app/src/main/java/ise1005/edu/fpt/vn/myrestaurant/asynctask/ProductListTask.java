@@ -19,19 +19,24 @@ import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
 
 public class ProductListTask extends AsyncTask<Void, Void, Boolean> {
     List<ProductDTO> listProduct =  new ArrayList<>();
-    String url = Constants.API_URL+"product/get/";
+    String url = Constants.API_URL+"product/get/?name=";
     private IAsyncTaskHandler container;
-
+    String name = "";
 
     public ProductListTask(IAsyncTaskHandler container) {
         this.container = container;
+    }
+
+    public ProductListTask(IAsyncTaskHandler container ,String name) {
+        this.container = container;
+        this.name = name.trim();
     }
     
     @Override
     protected Boolean doInBackground(Void... voids) {
         listProduct = new ArrayList<>();
         HttpHandler sh = new HttpHandler();
-        String jsonStr = sh.get(url);
+        String jsonStr = sh.get(url+name);
         if(jsonStr !=null) {
             try{
                 JSONObject jsonObject = new JSONObject(jsonStr);

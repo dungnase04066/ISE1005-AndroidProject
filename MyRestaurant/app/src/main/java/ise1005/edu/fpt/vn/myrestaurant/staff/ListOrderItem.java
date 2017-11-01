@@ -109,10 +109,12 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
                 try {
                     //if not null then mapVlaue must be equal the first element array
                     mapValue.put("id",dataModels.get(0).getOrder_id());
+                    Snackbar.make(view,"Submit", Snackbar.LENGTH_LONG);
                 }catch (Exception e){
                 }
                 mapValue.put("tableID",tableID);
                 ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("create", tableID, this, listView, null,JSonHelper.parseJsonOrderDetail(dataModels),mapValue);
+                Snackbar.make(view,"Submit", Snackbar.LENGTH_LONG);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -129,7 +131,9 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
 
             Intent intent = new Intent(this, PayForm.class);
             intent.putExtra("listPay",getListPay());
+            intent.putExtra("table_id",tableID);
             startActivity(intent);
+            return;
         }
 
     }
