@@ -17,6 +17,7 @@ if(!empty($username)){
 if($role>0){
     $sql .= "AND u.`role_id` = {$role} ";
 }
+$sql .= "ORDER BY u.`id` DESC";
 $rs = $mysqli->query($sql);
 $outp['result'] = $rs->fetch_all(MYSQLI_ASSOC);
 $outp['size'] = $rs->num_rows;

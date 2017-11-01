@@ -2,7 +2,7 @@
 $id = intval($_GET['id']);
 $user_id = intval($_GET['user_id']);
 $table_id = intval($_GET['table_id']);
-$status  = intval($_GET['status ']);
+$status  = intval($_GET['status']);
 $sql =  "SELECT * FROM `Orders` WHERE 1=1 ";
 if($id>0){
     $sql .= "AND `id` = {$id} ";
