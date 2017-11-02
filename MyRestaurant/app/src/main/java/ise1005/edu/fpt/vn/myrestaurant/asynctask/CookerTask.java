@@ -49,9 +49,9 @@ public class CookerTask extends AsyncTask<Void, Void, Boolean> {
             }catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
-            jsonStr = sh.get(url);
         }
+            jsonStr = sh.get(url);
+
         decodeData(jsonStr);
         return null;
     }
