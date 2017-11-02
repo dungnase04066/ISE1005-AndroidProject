@@ -30,21 +30,17 @@ import static android.app.Activity.RESULT_OK;
 
 public class ManagerMenuTask {
 
-    public ManagerMenuTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, ProductDTO p){
+    public ManagerMenuTask(String method, String txtSearch, IAsyncTaskHandler container, ListView lv, ProductDTO p) {
 
-        if(method.equals("get")){
-            new GetMenuTask(txtSearch,container,lv).execute((Void) null);
-        }
-        else if(method.equals("create")){
+        if (method.equals("get")) {
+            new GetMenuTask(txtSearch, container, lv).execute((Void) null);
+        } else if (method.equals("create")) {
             new CreateMenuTask(container, p).execute((Void) null);
-        }
-        else if(method.equals("delete")){
+        } else if (method.equals("delete")) {
             new DeleteMenuTask(p).execute((Void) null);
-        }
-        else if(method.equals("updateGetForm")){
+        } else if (method.equals("updateGetForm")) {
             new UpdateFormMenuTask(container, p).execute((Void) null);
-        }
-        else  if(method.equals("update")){
+        } else if (method.equals("update")) {
             new Update(container, p).execute((Void) null);
         }
 
@@ -56,15 +52,15 @@ class GetMenuTask extends AsyncTask<Void, Void, Boolean> {
 
     private final String txtSearch;
     private final IAsyncTaskHandler container;
-    private final List<HashMap<String,String>> lstMenus;
+    private final List<HashMap<String, String>> lstMenus;
     private JSONObject oneMenu;
     private Activity activity;
     private ListView lv;
 
-    public GetMenuTask(String txtSearch, IAsyncTaskHandler container, ListView lv){
+    public GetMenuTask(String txtSearch, IAsyncTaskHandler container, ListView lv) {
         this.txtSearch = txtSearch;
         this.container = container;
-        activity = (Activity)container;
+        activity = (Activity) container;
         lstMenus = new ArrayList<>();
         this.lv = lv;
 
@@ -74,22 +70,22 @@ class GetMenuTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         HttpHandler httpHandler = new HttpHandler();
-        try{
+        try {
             String json = httpHandler.get(Constants.API_URL + "product/get/?name=" + txtSearch);
             JSONObject jsonObj = new JSONObject(json);
             JSONArray menus = jsonObj.getJSONArray("result");
             lstMenus.clear();
-            for(int i=0;i<menus.length();i++){
+            for (int i = 0; i < menus.length(); i++) {
                 oneMenu = menus.getJSONObject(i);
                 String id = oneMenu.getString("id");
                 String name = oneMenu.getString("name");
                 String desc = oneMenu.getString("description");
                 String price = oneMenu.getString("price");
-                ProductDTO p = new ProductDTO(Integer.parseInt(id),name,Double.parseDouble(price), desc);
+                ProductDTO p = new ProductDTO(Integer.parseInt(id), name, Double.parseDouble(price), desc);
                 lstMenus.add(p.toHashMap());
             }
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("Error:", ex.getMessage());
         }
         return null;
@@ -99,7 +95,7 @@ class GetMenuTask extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         ListAdapter adapter = new SimpleAdapter(activity.getApplicationContext(), lstMenus,
-                R.layout.menu_list, new String[]{ "name","description", "price"},
+                R.layout.menu_list, new String[]{"name", "description", "price"},
                 new int[]{R.id.mlTvName, R.id.mlTvDesc, R.id.mlTvPrice});
         lv.setAdapter(adapter);
     }
@@ -112,9 +108,9 @@ class CreateMenuTask extends AsyncTask<Void, Void, Boolean> {
     Activity activity;
     boolean success = false;
 
-    public CreateMenuTask(IAsyncTaskHandler container, ProductDTO p){
+    public CreateMenuTask(IAsyncTaskHandler container, ProductDTO p) {
         this.container = container;
-        this.activity = (Activity)container;
+        this.activity = (Activity) container;
         this.p = p;
     }
 
@@ -122,18 +118,19 @@ class CreateMenuTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         HttpHandler httpHandler = new HttpHandler();
-        try{
+        try {
             JSONObject formData = new JSONObject();
             formData.put("name", p.getName());
             formData.put("description", p.getDescription());
-            formData.put("price", ""+p.getPrice());
+            formData.put("price", "" + p.getPrice());
+            formData.put("image", "" + p.getImage());
             String json = httpHandler.post(Constants.API_URL + "product/create/", formData.toString());
             JSONObject jsonObj = new JSONObject(json);
             if (jsonObj.getInt("size") > 0) {
                 success = true;
             }
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("Error:", ex.getMessage());
         }
         return null;
@@ -143,7 +140,7 @@ class CreateMenuTask extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         Intent intent = new Intent();
-        if(success)
+        if (success)
             intent.putExtra("result", "success!");
         else
             intent.putExtra("result", "failed");
@@ -157,7 +154,7 @@ class DeleteMenuTask extends AsyncTask<Void, Void, Boolean> {
     ProductDTO p;
     boolean success;
 
-    public DeleteMenuTask(ProductDTO p){
+    public DeleteMenuTask(ProductDTO p) {
         this.p = p;
     }
 
@@ -165,16 +162,16 @@ class DeleteMenuTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         HttpHandler httpHandler = new HttpHandler();
-        try{
+        try {
             JSONObject formData = new JSONObject();
-            formData.put("id",p.getId());
+            formData.put("id", p.getId());
             String json = httpHandler.post(Constants.API_URL + "product/delete/", formData.toString());
             JSONObject jsonObj = new JSONObject(json);
             if (!jsonObj.getBoolean("hasErr")) {
                 success = true;
             }
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("Error:", ex.getMessage());
         }
         return null;
@@ -183,7 +180,7 @@ class DeleteMenuTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
-        if(success)
+        if (success)
             Log.e("Result: ", "YES!");
         else
             Log.e("Result: ", "Nah!");
@@ -203,18 +200,18 @@ class UpdateFormMenuTask extends AsyncTask<Void, Void, Boolean> {
     public String price;
 
 
-    public UpdateFormMenuTask(IAsyncTaskHandler container , ProductDTO p){
+    public UpdateFormMenuTask(IAsyncTaskHandler container, ProductDTO p) {
         this.container = container;
-        activity = (Activity)container;
+        activity = (Activity) container;
         this.p = p;
     }
 
     @Override
     protected Boolean doInBackground(Void... voids) {
         HttpHandler httpHandler = new HttpHandler();
-        try{
+        try {
 
-            String json = httpHandler.get(Constants.API_URL + "product/get/?id="+p.getId());
+            String json = httpHandler.get(Constants.API_URL + "product/get/?id=" + p.getId());
             JSONObject jsonObj = new JSONObject(json);
             JSONArray menus = jsonObj.getJSONArray("result");
 
@@ -223,7 +220,7 @@ class UpdateFormMenuTask extends AsyncTask<Void, Void, Boolean> {
             name = oneMenu.getString("name");
             desc = oneMenu.getString("description");
             price = oneMenu.getString("price");
-            p_i = new ProductDTO(Integer.parseInt(id),name,Double.parseDouble(price), desc);
+            p_i = new ProductDTO(Integer.parseInt(id), name, Double.parseDouble(price), desc);
 
             MenuForm.up_p = p_i;
 
@@ -234,6 +231,8 @@ class UpdateFormMenuTask extends AsyncTask<Void, Void, Boolean> {
                     MenuForm.name.setText(name.toString());
                     MenuForm.desc.setText(desc.toString());
                     MenuForm.price.setText(price.toString());
+                    new DownloadImageTask(MenuForm.mMenuIvImage)
+                            .execute(Constants.API_URL + "product/image/?id=" + id.toString());
                 }
             });
 
@@ -241,7 +240,7 @@ class UpdateFormMenuTask extends AsyncTask<Void, Void, Boolean> {
             Log.e("PPP: ", MenuForm.up_p.toString());
 
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("Update-Error:", ex.getMessage());
         }
         return null;
@@ -261,9 +260,9 @@ class Update extends AsyncTask<Void, Void, Boolean> {
     Activity activity;
     boolean success = false;
 
-    public Update(IAsyncTaskHandler container, ProductDTO p){
+    public Update(IAsyncTaskHandler container, ProductDTO p) {
         this.container = container;
-        this.activity = (Activity)container;
+        this.activity = (Activity) container;
         this.p = p;
     }
 
@@ -271,20 +270,21 @@ class Update extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         HttpHandler httpHandler = new HttpHandler();
-        try{
+        try {
             Log.e("Update-Async", p.toString());
             JSONObject formData = new JSONObject();
-            formData.put("id",p.getId());
+            formData.put("id", p.getId());
             formData.put("name", p.getName());
             formData.put("description", p.getDescription());
-            formData.put("price", ""+p.getPrice());
+            formData.put("price", "" + p.getPrice());
+            formData.put("image", "" + p.getImage());
             String json = httpHandler.post(Constants.API_URL + "product/update/", formData.toString());
             JSONObject jsonObj = new JSONObject(json);
             if (jsonObj.getInt("size") > 0) {
                 success = true;
             }
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("Error:", ex.getMessage());
         }
         return null;
@@ -294,7 +294,7 @@ class Update extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         Intent intent = new Intent();
-        if(success)
+        if (success)
             intent.putExtra("result", "success!");
         else
             intent.putExtra("result", "failed");

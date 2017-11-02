@@ -1,9 +1,5 @@
 package ise1005.edu.fpt.vn.myrestaurant.apihelper;
 
-import android.os.Build;
-import android.support.annotation.IntegerRes;
-import android.support.annotation.InterpolatorRes;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,13 +8,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.HttpHandler;
-import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
-import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.OrderDTO;
 import ise1005.edu.fpt.vn.myrestaurant.dto.OrderDetailDTO;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
-import ise1005.edu.fpt.vn.myrestaurant.dto.UserDTO;
 
 /**
  * Created by Admin on 10/27/2017.
@@ -50,6 +42,7 @@ public class JSonHelper {
             if(orderDetailDTO.getOrder_id() >-1) {
                 formData.put("order_id", orderDetailDTO.getId());
             }
+            formData.put("id", orderDetailDTO.getId());
             formData.put("product_id", orderDetailDTO.getProduct_id());
             formData.put("price", orderDetailDTO.getPrice());
             formData.put("quantity", orderDetailDTO.getQuantity());

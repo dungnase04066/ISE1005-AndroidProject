@@ -1,15 +1,14 @@
 package ise1005.edu.fpt.vn.myrestaurant.staff;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,7 +24,6 @@ import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.TableListTask;
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
 import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class TableActivity extends AppCompatActivity implements IAsyncTaskHandler, AdapterView.OnItemSelectedListener,TextWatcher {
     private ListView listTable;

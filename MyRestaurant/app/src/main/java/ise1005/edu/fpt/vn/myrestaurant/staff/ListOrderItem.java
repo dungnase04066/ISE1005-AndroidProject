@@ -2,36 +2,33 @@ package ise1005.edu.fpt.vn.myrestaurant.staff;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.pusher.client.channel.SubscriptionEventListener;
 
-import java.lang.reflect.Array;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.adapter.ListOrderDetailAdapter;
-import ise1005.edu.fpt.vn.myrestaurant.adapter.ListProductAdapter;
 import ise1005.edu.fpt.vn.myrestaurant.apihelper.JSonHelper;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.ManagerOrderDetailTask;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.ProductListTask;
+import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
+import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.OrderDetailDTO;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
 
-public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandler, View.OnClickListener {
+public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandler, View.OnClickListener, SubscriptionEventListener {
 
     ArrayList<OrderDetailDTO> dataModels;
     ListView listView;
@@ -73,7 +70,9 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
             this.tableID = "2";
         }
         ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("get", this.tableID, this, listView, null, null, null);
-
+        if (Session.pusher != null && Session.channel != null) {
+            Session.channel.bind(Constants.PUSHER_EVENT_FOR_STAFF, this);
+        }
     }
 
     @Override
@@ -175,9 +174,19 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
                     dataModels.add(orderDetailDTO);
                 } else {
                     orderDetailDTO = dataModels.get(index);
-                    orderDetailDTO.setQuantity(orderDetailDTO.getQuantity() + 1);
-                    orderDetailDTO.setProduct_id(productDTO.getId());
-                    dataModels.set(index, orderDetailDTO);
+                    /*if (orderDetailDTO.getStatus() != 0) {
+                        orderDetailDTO = new OrderDetailDTO();
+                        orderDetailDTO.setProduct(productDTO);
+                        orderDetailDTO.setPrice(productDTO.getPrice());
+                        orderDetailDTO.setQuantity(1);
+                        orderDetailDTO.setProduct_id(productDTO.getId());
+                        orderDetailDTO.setOrder_id(-1);
+                        dataModels.add(orderDetailDTO);
+                    } else {*/
+                        orderDetailDTO.setQuantity(orderDetailDTO.getQuantity() + 1);
+                        orderDetailDTO.setProduct_id(productDTO.getId());
+                        dataModels.set(index, orderDetailDTO);
+                   // }
                 }
                 onPostExecute(dataModels);
             }
@@ -201,10 +210,15 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
 
     public int findDuplicate(ArrayList<OrderDetailDTO> dataModels, ProductDTO productDTO) {
         for (int index = 0, length = dataModels.size(); index < length; index++) {
-            if (dataModels.get(index).getProduct().getId() == productDTO.getId()) {
+            if (dataModels.get(index).getProduct().getId() == productDTO.getId() && dataModels.get(index).getStatus()==0) {
                 return index;
             }
         }
         return -1;
+    }
+
+    @Override
+    public void onEvent(String s, String s1, String s2) {
+        ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("get", this.tableID, this, listView, null, null, null);
     }
 }

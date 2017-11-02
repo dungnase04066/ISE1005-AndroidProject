@@ -6,7 +6,6 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;

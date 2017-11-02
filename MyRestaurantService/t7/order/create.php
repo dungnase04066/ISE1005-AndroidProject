@@ -24,6 +24,11 @@ if(isset($_POST['user_id']) && isset($_POST['table_id']) && isset($_POST['order_
                 $outp['result'] = array('message'=>'Create unsuccess');
             }
         }
+        $sql =  "SELECT name FROM `tables` WHERE `id` = {$table_id}";
+        $rs = $mysqli->query($sql);
+        $data = array_pop($rs->fetch_all(MYSQLI_ASSOC));
+        $message = "New order from ".$data['name'];
+        $pusher->trigger($PUSHER_CHANNEL, $PUSHER_EVENT_FOR_COOKER, array("message"=>$message));
     }else{
         $outp['result'] = array('message'=>'System fail');
     }

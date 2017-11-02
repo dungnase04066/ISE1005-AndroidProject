@@ -11,7 +11,6 @@ import java.util.List;
 
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
-import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
 
 /**
  * Created by authinh on 10/24/17.

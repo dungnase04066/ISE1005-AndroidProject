@@ -18,7 +18,10 @@ $pusherOptions = array(
     'cluster' => 'ap1',
     'encrypted' => true
 );
-
+$PUSHER_CHANNEL = "ISE1005";
+$PUSHER_EVENT_FOR_MANAGER = "MYRESTAURANT_MANAGER";
+$PUSHER_EVENT_FOR_COOKER = "MYRESTAURANT_COOKER";
+$PUSHER_EVENT_FOR_STAFF = "MYRESTAURANT_STAFF";
 error_reporting(0);
 
 $mysqli = new mysqli($dbhost,$dbuser,$dbpass,$dbname);

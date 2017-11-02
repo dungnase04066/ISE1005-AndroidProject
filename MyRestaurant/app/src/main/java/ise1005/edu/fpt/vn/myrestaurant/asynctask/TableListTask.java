@@ -1,7 +1,6 @@
 package ise1005.edu.fpt.vn.myrestaurant.asynctask;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,9 +8,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.HttpHandler;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
-import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
 import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
 
 /**

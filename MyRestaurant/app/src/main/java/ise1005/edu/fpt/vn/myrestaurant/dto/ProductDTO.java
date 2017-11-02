@@ -12,6 +12,7 @@ public class ProductDTO implements Serializable {
     private String name;
     private double price;
     private String description;
+    private String image;
 
     public ProductDTO() {
     }
@@ -64,6 +65,14 @@ public class ProductDTO implements Serializable {
 
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "ProductDTO{" +
@@ -74,12 +83,12 @@ public class ProductDTO implements Serializable {
                 '}';
     }
 
-    public HashMap<String,String> toHashMap(){
+    public HashMap<String, String> toHashMap() {
         HashMap<String, String> hm = new HashMap<>();
-        hm.put("id",""+id);
-        hm.put("name",name);
-        hm.put("price", ""+price);
-        hm.put("description",description);
+        hm.put("id", "" + id);
+        hm.put("name", name);
+        hm.put("price", "" + price);
+        hm.put("description", description);
         return hm;
     }
 }

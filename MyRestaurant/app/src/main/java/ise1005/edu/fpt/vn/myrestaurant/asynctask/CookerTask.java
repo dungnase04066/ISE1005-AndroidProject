@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.widget.AdapterView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,9 +37,7 @@ public class CookerTask extends AsyncTask<Void, Void, Boolean> {
         HttpHandler sh = new HttpHandler();
 
         String jsonStr = null;
-        Log.d("6666", orderDetailDTO.toString());
         if(orderDetailDTO.getId()!=0){
-            Log.d("mmmm", orderDetailDTO.toString());
             try{
                 JSONObject update = new JSONObject();
                 update.put("id", orderDetailDTO.getId());

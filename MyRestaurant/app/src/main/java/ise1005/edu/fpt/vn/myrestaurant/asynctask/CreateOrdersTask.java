@@ -5,14 +5,11 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
-import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.OrderDTO;
 import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
-import ise1005.edu.fpt.vn.myrestaurant.dto.UserDTO;
 
 /**
  * Created by authinh on 10/24/17.

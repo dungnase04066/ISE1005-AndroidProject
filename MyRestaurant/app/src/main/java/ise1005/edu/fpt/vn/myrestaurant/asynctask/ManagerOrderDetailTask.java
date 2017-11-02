@@ -1,7 +1,6 @@
 package ise1005.edu.fpt.vn.myrestaurant.asynctask;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -13,15 +12,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import ise1005.edu.fpt.vn.myrestaurant.apihelper.JSonHelper;
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.OrderDetailDTO;
 import ise1005.edu.fpt.vn.myrestaurant.manager.MenuForm;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Admin on 10/25/2017.
@@ -105,6 +101,7 @@ public class ManagerOrderDetailTask {
             }
             return null;
         }
+
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {

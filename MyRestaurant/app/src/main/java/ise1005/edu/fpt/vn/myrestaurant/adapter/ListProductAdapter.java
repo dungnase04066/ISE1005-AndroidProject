@@ -14,13 +14,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
+import ise1005.edu.fpt.vn.myrestaurant.asynctask.DownloadImageTask;
+import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
 import ise1005.edu.fpt.vn.myrestaurant.dto.ProductDTO;
 
 /**
  * Created by Admin on 10/24/2017.
  */
 
-public class ListProductAdapter extends ArrayAdapter<ProductDTO> implements View.OnClickListener{
+public class ListProductAdapter extends ArrayAdapter<ProductDTO> implements View.OnClickListener {
 
     private ArrayList<ProductDTO> dataSet;
     Context mContext;
@@ -35,7 +37,7 @@ public class ListProductAdapter extends ArrayAdapter<ProductDTO> implements View
         ImageView pic;
     }
 
-    public ListProductAdapter( ArrayList<ProductDTO> dataSet, Context mContext) {
+    public ListProductAdapter(ArrayList<ProductDTO> dataSet, Context mContext) {
         super(mContext, R.layout.row_item, dataSet);
         this.dataSet = dataSet;
         this.mContext = mContext;
@@ -43,14 +45,13 @@ public class ListProductAdapter extends ArrayAdapter<ProductDTO> implements View
 
     @Override
     public void onClick(View v) {
-        int position=(Integer) v.getTag();
-        Object object= getItem(position);
-        ProductDTO dataModel=(ProductDTO)object;
+        int position = (Integer) v.getTag();
+        Object object = getItem(position);
+        ProductDTO dataModel = (ProductDTO) object;
 
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.item_info:
-                Snackbar.make(v, "pick: " +dataModel.getName(), Snackbar.LENGTH_LONG)
+                Snackbar.make(v, "pick: " + dataModel.getName(), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
                 break;
         }
@@ -79,12 +80,12 @@ public class ListProductAdapter extends ArrayAdapter<ProductDTO> implements View
             viewHolder.info = (ImageView) convertView.findViewById(R.id.item_info);
             viewHolder.txtQuantity = (TextView) convertView.findViewById(R.id.quantity_number);
             viewHolder.pic = (ImageView) convertView.findViewById(R.id.pic_product);
-            result=convertView;
+            result = convertView;
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
+            result = convertView;
         }
 
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
@@ -93,11 +94,13 @@ public class ListProductAdapter extends ArrayAdapter<ProductDTO> implements View
 
         viewHolder.txtName.setText(dataModel.getName());
         viewHolder.txtdescription.setText(dataModel.getDescription());
-        viewHolder.txtprice.setText(dataModel.getPrice()+"");
+        viewHolder.txtprice.setText(dataModel.getPrice() + "");
         viewHolder.txtQuantity.setText("");
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
-        viewHolder.pic.setImageResource(R.mipmap.ic_shop);
+//        viewHolder.pic.setImageResource(R.mipmap.ic_shop);
+        new DownloadImageTask(viewHolder.pic)
+                .execute(Constants.API_URL + "product/image/?id=" + dataModel.getId());
         // Return the completed view to render on screen
         return convertView;
     }

@@ -12,7 +12,6 @@ import java.util.List;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
-import ise1005.edu.fpt.vn.myrestaurant.staff.TableActivity;
 
 /**
  * Created by Administrator on 23-Oct-17.

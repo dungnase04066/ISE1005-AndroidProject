@@ -3,9 +3,6 @@ package ise1005.edu.fpt.vn.myrestaurant.manager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.view.WindowManager;
 
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 

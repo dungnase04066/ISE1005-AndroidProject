@@ -1,7 +1,7 @@
 package ise1005.edu.fpt.vn.myrestaurant.manager;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.asynctask.ManagerTableTask;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
+import ise1005.edu.fpt.vn.myrestaurant.asynctask.ManagerTableTask;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.dto.TableDTO;
 

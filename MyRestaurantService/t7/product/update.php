@@ -4,7 +4,8 @@ if(isset($_POST['id']) && isset($_POST['name']) && isset($_POST['price'])){
     $description = trim($mysqli->real_escape_string($_POST['description']));
     $price = floatval($_POST['price']);
     $id = intval($_POST['id']);
-    $sql = "UPDATE `products` SET `name`='{$name}',`description`='{$description}',`price`={$price} WHERE `id`={$id}";
+    $image = trim($mysqli->real_escape_string($_POST['image']));
+    $sql = "UPDATE `products` SET `name`='{$name}',`description`='{$description}',`price`={$price}, `image`='{$image}' WHERE `id`={$id}";
     if($mysqli->query($sql)){
         $sql =  "SELECT * FROM `products` WHERE `id` = {$id} ";
         $rs = $mysqli->query($sql);

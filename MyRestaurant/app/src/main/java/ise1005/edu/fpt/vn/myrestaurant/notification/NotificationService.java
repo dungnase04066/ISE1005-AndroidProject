@@ -1,9 +1,7 @@
 package ise1005.edu.fpt.vn.myrestaurant.notification;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
@@ -12,7 +10,6 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
-import ise1005.edu.fpt.vn.myrestaurant.util.LoginActivity;
 
 public class NotificationService extends Service {
     public NotificationService() {

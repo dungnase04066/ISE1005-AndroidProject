@@ -3,7 +3,8 @@ if(isset($_POST['name']) && isset($_POST['price'])){
     $name = trim($mysqli->real_escape_string($_POST['name']));
     $description = trim($mysqli->real_escape_string($_POST['description']));
     $price = floatval($_POST['price']);
-    $sql = "INSERT INTO `products` (`name`, `description`, `price`) VALUES ('{$name}','{$description}',$price)";
+    $image = trim($mysqli->real_escape_string($_POST['image']));
+    $sql = "INSERT INTO `products` (`name`, `description`, `price`,`image`) VALUES ('{$name}','{$description}',$price, '{$image}')";
     $rs = $mysqli->query($sql);
     $insert_id = $mysqli->insert_id;
     if($insert_id>0){

@@ -1,37 +1,35 @@
 package ise1005.edu.fpt.vn.myrestaurant.notification;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
-import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.SubscriptionEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Date;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
-import ise1005.edu.fpt.vn.myrestaurant.util.LoginActivity;
+import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 
 /**
  * Created by DungNA on 10/22/17.
  */
 
 public class Notification extends Service implements SubscriptionEventListener {
-    private Pusher pusher;
-    private Channel channel;
+
     private String eventName;
 
     public Notification() {
@@ -43,10 +41,9 @@ public class Notification extends Service implements SubscriptionEventListener {
         Bundle extras = intent.getExtras();
         PusherOptions options = new PusherOptions();
         options.setCluster("ap1");
-        pusher = new Pusher(Constants.PUSHER_KEY, options);
-        channel = pusher.subscribe(Constants.PUSHER_CHANNEL);
-        channel.bind(extras.getString("eventName"), this);
-        Log.d("NotificationService","Event name: "+extras.getString("eventName"));
+        Session.pusher = new Pusher(Constants.PUSHER_KEY, options);
+        Session.channel = Session.pusher.subscribe(Constants.PUSHER_CHANNEL);
+        Session.channel.bind(extras.getString("eventName"), this);
         connect();
 //        return super.onStartCommand(intent, flags, startId);
         return START_STICKY;
@@ -59,20 +56,28 @@ public class Notification extends Service implements SubscriptionEventListener {
     }
 
     public void connect() {
-        pusher.connect();
+        Session.pusher.connect();
         Log.d("NotificationService", "Connected to pusher");
     }
 
     @Override
     public void onEvent(String channelName, String eventName, final String data) {
-        Log.d("NotificationService", "Received event");
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
         mBuilder.setSmallIcon(R.mipmap.ic_shop);
-        mBuilder.setContentTitle("Notification Alert, Click Me!");
-        mBuilder.setContentText(data);
         mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-        mBuilder.setVibrate(new long[]{500,500,500,500,500,500,500});
-        mNotificationManager.notify((int) (new Date().getTime()/1000), mBuilder.build());
+        mBuilder.setVibrate(new long[]{500, 500, 500, 500, 500, 500, 500});
+        mBuilder.setContentTitle("MY RESTAURANT");
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            mBuilder.setContentText(jsonObject.getString("message"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("NotificationService", "Received event");
+
+
+        mNotificationManager.notify((int) (new Date().getTime() / 1000), mBuilder.build());
     }
 }

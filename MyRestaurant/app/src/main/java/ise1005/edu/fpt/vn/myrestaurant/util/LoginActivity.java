@@ -21,13 +21,11 @@ import android.widget.TextView;
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.UserLoginTask;
+import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
 import ise1005.edu.fpt.vn.myrestaurant.cooker.CookerActivity;
 import ise1005.edu.fpt.vn.myrestaurant.manager.Dashboard;
-import ise1005.edu.fpt.vn.myrestaurant.manager.*;
-import ise1005.edu.fpt.vn.myrestaurant.manager.Menu;
 import ise1005.edu.fpt.vn.myrestaurant.notification.Notification;
-import ise1005.edu.fpt.vn.myrestaurant.staff.ListOrderItem;
 import ise1005.edu.fpt.vn.myrestaurant.staff.TableActivity;
 
 /**
@@ -69,12 +67,6 @@ public class LoginActivity extends AppCompatActivity implements IAsyncTaskHandle
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-        Intent intent = new Intent(getBaseContext(), Notification.class);
-        Bundle extras = new Bundle();
-        extras.putString("eventName", "test");
-        intent.putExtras(extras);
-        startService(intent);
     }
 
     private void attemptLogin() {
@@ -158,13 +150,20 @@ public class LoginActivity extends AppCompatActivity implements IAsyncTaskHandle
 //            Intent intent = new Intent(this, NotificationService.class);
 //            startService(intent);
             if(Session.currentUser.getStatus() == 0){
+                Intent intent = new Intent(getBaseContext(), Notification.class);
+                Bundle extras = new Bundle();
                 if(Session.currentUser.getRole_id()==1){
                     startActivity( new Intent(this, Dashboard.class));
+                    extras.putString("eventName", Constants.PUSHER_EVENT_FOR_MANAGER);
                 }else if(Session.currentUser.getRole_id()==3){
                     startActivity( new Intent(this, TableActivity.class));
+                    extras.putString("eventName", Constants.PUSHER_EVENT_FOR_STAFF);
                 }else{
                     startActivity( new Intent(this, CookerActivity.class));
+                    extras.putString("eventName", Constants.PUSHER_EVENT_FOR_COOKER);
                 }
+                intent.putExtras(extras);
+                startService(intent);
             }else{
                 mPasswordView.setError(getString(R.string.error_account_disabled));
                 mPasswordView.requestFocus();

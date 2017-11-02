@@ -1,7 +1,9 @@
 package ise1005.edu.fpt.vn.myrestaurant.config;
 
+import com.pusher.client.Pusher;
+import com.pusher.client.channel.Channel;
+
 import ise1005.edu.fpt.vn.myrestaurant.dto.UserDTO;
-import ise1005.edu.fpt.vn.myrestaurant.notification.Notification;
 
 /**
  * Created by DungNA on 10/20/17.
@@ -9,5 +11,6 @@ import ise1005.edu.fpt.vn.myrestaurant.notification.Notification;
 
 public class Session {
     public static UserDTO currentUser;
-    public static Notification notification;
+    public static Pusher pusher;
+    public static Channel channel;
 }

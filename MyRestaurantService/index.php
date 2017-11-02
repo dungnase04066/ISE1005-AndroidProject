@@ -10,6 +10,8 @@ $_POST = json_decode( $inputJSON, TRUE );
 $model = strtolower($url[1]);
 $action = strtolower($url[2]);
 $path = 't7/'.$model.'/'.$action.'.php';
+include_once "pusher/Pusher.php";
+$pusher = new Pusher\Pusher($pusherConfig['key'], $pusherConfig['secret'], $pusherConfig['app_id'], $pusherOptions);
 if(file_exists($path)){
     header('Content-type: application/json; charset=utf-8');    
     $outp = array();
