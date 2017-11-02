@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,6 +116,7 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
                 mapValue.put("tableID",tableID);
                 ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("create", tableID, this, listView, null,JSonHelper.parseJsonOrderDetail(dataModels),mapValue);
                 Snackbar.make(view,"Submit", Snackbar.LENGTH_LONG);
+                Toast.makeText(this, "The order have been submitted", Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -122,8 +124,9 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         }
 
         if (getWiget == R.id.mProductBtnCancel) {
-            Intent intent = new Intent(this, TableActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this, TableActivity.class);
+//            startActivity(intent);
+            finish();
             return;
         }
 

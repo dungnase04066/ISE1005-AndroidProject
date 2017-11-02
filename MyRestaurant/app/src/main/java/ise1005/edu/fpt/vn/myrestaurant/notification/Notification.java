@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.IntDef;
@@ -16,6 +18,8 @@ import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.SubscriptionEventListener;
+
+import java.util.Date;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
@@ -66,7 +70,9 @@ public class Notification extends Service implements SubscriptionEventListener {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
         mBuilder.setSmallIcon(R.mipmap.ic_shop);
         mBuilder.setContentTitle("Notification Alert, Click Me!");
-        mBuilder.setContentText("Hi, This is Android Notification Detail!");
-        mNotificationManager.notify(100, mBuilder.build());
+        mBuilder.setContentText(data);
+        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        mBuilder.setVibrate(new long[]{500,500,500,500,500,500,500});
+        mNotificationManager.notify((int) (new Date().getTime()/1000), mBuilder.build());
     }
 }

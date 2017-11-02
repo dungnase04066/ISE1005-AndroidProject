@@ -30,6 +30,7 @@
         <activity android:name=".manager.MenuForm" />
         <activity android:name=".manager.Table" />
         <activity android:name=".manager.TableForm" />
+        <activity android:name=".cooker.CookerActivity" />
 
         <service
             android:name=".notification.Notification"
@@ -37,7 +38,6 @@
             android:exported="true" />
 
         <activity android:name=".staff.TableActivity" />
-        <activity android:name=".staff.ListTable" />
         <activity android:name=".staff.FormOrder" />
         <activity android:name=".staff.ListOrderItem" />
         <activity android:name=".manager.Dashboard" />
