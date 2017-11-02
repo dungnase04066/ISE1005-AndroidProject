@@ -45,7 +45,7 @@ public class TableActivity extends AppCompatActivity implements IAsyncTaskHandle
         listTable.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 TableDTO o = (TableDTO) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),o.getId()+"",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"You open "+o.getName()+"",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(TableActivity.this, ListOrderItem.class);
                 intent.putExtra("table_id", o.getId()+"");
                 startActivity(intent);
@@ -155,5 +155,11 @@ public class TableActivity extends AppCompatActivity implements IAsyncTaskHandle
         }
         TableListTask tableListTask = new TableListTask(url, this);
         tableListTask.execute();
+    }
+
+    @Override
+    protected void onResume() {
+        inputdata.setText("");
+        super.onResume();
     }
 }

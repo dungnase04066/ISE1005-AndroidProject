@@ -62,7 +62,11 @@ public class TableStaffAdapter extends BaseAdapter implements View.OnClickListen
         Log.d("SE10000", String.valueOf(holder.name == null));
         holder.name.setText(table.getName());
         holder.description.setText(table.getDescription());
-        holder.status.setText(table.getStatus()+"");
+        if(table.getStatus() == 0){
+            holder.status.setText("Free");
+        }else{
+            holder.status.setText("Hold");
+        }
         return view;
     }
 

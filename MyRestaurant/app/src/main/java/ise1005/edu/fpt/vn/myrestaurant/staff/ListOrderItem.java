@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,7 +72,7 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
             this.id = "1";
             this.tableID = "2";
         }
-        ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("get", this.tableID, this, listView, null,null,null);
+        ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("get", this.tableID, this, listView, null, null, null);
 
     }
 
@@ -108,13 +109,14 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
                 HashMap mapValue = new HashMap();
                 try {
                     //if not null then mapVlaue must be equal the first element array
-                    mapValue.put("id",dataModels.get(0).getOrder_id());
-                    Snackbar.make(view,"Submit", Snackbar.LENGTH_LONG);
-                }catch (Exception e){
+                    mapValue.put("id", dataModels.get(0).getOrder_id());
+                    Snackbar.make(view, "Submit", Snackbar.LENGTH_LONG);
+                } catch (Exception e) {
                 }
-                mapValue.put("tableID",tableID);
-                ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("create", tableID, this, listView, null,JSonHelper.parseJsonOrderDetail(dataModels),mapValue);
-                Snackbar.make(view,"Submit", Snackbar.LENGTH_LONG);
+                mapValue.put("tableID", tableID);
+                ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("create", tableID, this, listView, null, JSonHelper.parseJsonOrderDetail(dataModels), mapValue);
+                Snackbar.make(view, "Submit", Snackbar.LENGTH_LONG);
+                Toast.makeText(this, "The order have been submitted", Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -122,46 +124,48 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         }
 
         if (getWiget == R.id.mProductBtnCancel) {
-            Intent intent = new Intent(this, TableActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this, TableActivity.class);
+//            startActivity(intent);
+            finish();
             return;
         }
 
-        if (getWiget == R.id.mProductBtnPay){
+        if (getWiget == R.id.mProductBtnPay) {
 
             Intent intent = new Intent(this, PayForm.class);
-            intent.putExtra("listPay",getListPay());
-            intent.putExtra("table_id",tableID);
+            intent.putExtra("listPay", getListPay());
+            intent.putExtra("table_id", tableID);
             startActivity(intent);
             return;
         }
 
     }
 
-    public String getListPay(){
+    public String getListPay() {
         StringBuffer listPay = new StringBuffer();
         double summeryTotal = 0;
-        for ( OrderDetailDTO orderDetail : dataModels) {
+        for (OrderDetailDTO orderDetail : dataModels) {
             double total = orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
-            listPay.append(orderDetail.getProduct().getName()+ " * " + orderDetail.getQuantity() + " \t= " + total+"vnd\n");
+            listPay.append(orderDetail.getProduct().getName() + " * " + orderDetail.getQuantity() + " \t= " + total + "vnd\n");
             summeryTotal += total;
         }
         listPay.append("=============================\n");
-        listPay.append("==>Total: "+summeryTotal+"vnd");
+        listPay.append("==>Total: " + summeryTotal + "vnd");
         return listPay.toString();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) return;
         Bundle bundle = data.getExtras();
 
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 ProductDTO productDTO = (ProductDTO) bundle.getSerializable("productDTO");
-                int index = findDuplicate(dataModels,productDTO);
+                int index = findDuplicate(dataModels, productDTO);
                 OrderDetailDTO orderDetailDTO;
-                if(index ==-1 ){
+                if (index == -1) {
                     orderDetailDTO = new OrderDetailDTO();
                     orderDetailDTO.setProduct(productDTO);
                     orderDetailDTO.setPrice(productDTO.getPrice());
@@ -169,11 +173,11 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
                     orderDetailDTO.setProduct_id(productDTO.getId());
                     orderDetailDTO.setOrder_id(-1);
                     dataModels.add(orderDetailDTO);
-                }else{
+                } else {
                     orderDetailDTO = dataModels.get(index);
-                    orderDetailDTO.setQuantity(orderDetailDTO.getQuantity()+1);
+                    orderDetailDTO.setQuantity(orderDetailDTO.getQuantity() + 1);
                     orderDetailDTO.setProduct_id(productDTO.getId());
-                    dataModels.set(index,orderDetailDTO);
+                    dataModels.set(index, orderDetailDTO);
                 }
                 onPostExecute(dataModels);
             }
@@ -195,9 +199,9 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         }
     }
 
-    public int findDuplicate(ArrayList<OrderDetailDTO> dataModels,ProductDTO productDTO){
-        for (int index =0, length = dataModels.size(); index < length; index++){
-            if(dataModels.get(index).getProduct().getId() == productDTO.getId()){
+    public int findDuplicate(ArrayList<OrderDetailDTO> dataModels, ProductDTO productDTO) {
+        for (int index = 0, length = dataModels.size(); index < length; index++) {
+            if (dataModels.get(index).getProduct().getId() == productDTO.getId()) {
                 return index;
             }
         }

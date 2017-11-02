@@ -7,7 +7,7 @@ if($id>0 || $table_id>0){
         $rs = $mysqli->query($sql);
         $od = $rs->fetch_all(MYSQLI_ASSOC);
         if(count($od)>0) $id = $od[0]['id'];
-    }
+    }   
     $sql =  "SELECT * FROM `order_detail` WHERE `order_id` = {$id} ";
     $rs = $mysqli->query($sql);
     $details = $rs->fetch_all(MYSQLI_ASSOC);

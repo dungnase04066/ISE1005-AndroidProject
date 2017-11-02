@@ -22,6 +22,7 @@ import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.IAsyncTaskHandler;
 import ise1005.edu.fpt.vn.myrestaurant.asynctask.UserLoginTask;
 import ise1005.edu.fpt.vn.myrestaurant.config.Session;
+import ise1005.edu.fpt.vn.myrestaurant.cooker.CookerActivity;
 import ise1005.edu.fpt.vn.myrestaurant.manager.Dashboard;
 import ise1005.edu.fpt.vn.myrestaurant.manager.*;
 import ise1005.edu.fpt.vn.myrestaurant.manager.Menu;
@@ -68,6 +69,12 @@ public class LoginActivity extends AppCompatActivity implements IAsyncTaskHandle
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        Intent intent = new Intent(getBaseContext(), Notification.class);
+        Bundle extras = new Bundle();
+        extras.putString("eventName", "test");
+        intent.putExtras(extras);
+        startService(intent);
     }
 
     private void attemptLogin() {
@@ -155,6 +162,8 @@ public class LoginActivity extends AppCompatActivity implements IAsyncTaskHandle
                     startActivity( new Intent(this, Dashboard.class));
                 }else if(Session.currentUser.getRole_id()==3){
                     startActivity( new Intent(this, TableActivity.class));
+                }else{
+                    startActivity( new Intent(this, CookerActivity.class));
                 }
             }else{
                 mPasswordView.setError(getString(R.string.error_account_disabled));

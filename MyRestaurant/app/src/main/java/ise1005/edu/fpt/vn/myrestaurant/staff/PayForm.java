@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
 import ise1005.edu.fpt.vn.myrestaurant.apihelper.JSonHelper;
@@ -43,13 +44,16 @@ public class PayForm extends AppCompatActivity implements View.OnClickListener,I
     @Override
     public void onClick(View view) {
         int getwide = view.getId();
+        Intent intent = new Intent(this, TableActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         switch (getwide){
             case R.id.btnClose:
                 ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("close", tableID, this, null, null, null,null);
                 Snackbar.make(view,"Closed", Snackbar.LENGTH_LONG);
+                Toast.makeText(this, "The order have been closed", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
                 break;
             case R.id.btnTable:
-                Intent intent = new Intent(this, TableActivity.class);
                 startActivity(intent);
                 break;
         }

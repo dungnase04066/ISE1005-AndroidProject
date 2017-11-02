@@ -29,19 +29,19 @@ public class NotificationService extends Service {
         // Let it continue running until it is stopped.
         Log.d("NotificationService", "Service Started");
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent i = Intent.makeRestartActivityTask(new ComponentName(this, LoginActivity.class));
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        0,
-                        i,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+//        Intent i = Intent.makeRestartActivityTask(new ComponentName(this, LoginActivity.class));
+//        PendingIntent resultPendingIntent =
+//                PendingIntent.getActivity(
+//                        this,
+//                        0,
+//                        i,
+//                        PendingIntent.FLAG_UPDATE_CURRENT
+//                );
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
         mBuilder.setSmallIcon(R.mipmap.ic_shop);
         mBuilder.setContentTitle("Notification Alert, Click Me!");
         mBuilder.setContentText("Hi, This is Android Notification Detail!");
-        mBuilder.setContentIntent(resultPendingIntent);
+//        mBuilder.setContentIntent(resultPendingIntent);
         mNotificationManager.notify(100, mBuilder.build());
         stopSelf();
         return START_STICKY;

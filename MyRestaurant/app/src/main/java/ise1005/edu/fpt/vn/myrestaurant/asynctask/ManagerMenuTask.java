@@ -78,9 +78,7 @@ class GetMenuTask extends AsyncTask<Void, Void, Boolean> {
             String json = httpHandler.get(Constants.API_URL + "product/get/?name=" + txtSearch);
             JSONObject jsonObj = new JSONObject(json);
             JSONArray menus = jsonObj.getJSONArray("result");
-
             lstMenus.clear();
-
             for(int i=0;i<menus.length();i++){
                 oneMenu = menus.getJSONObject(i);
                 String id = oneMenu.getString("id");

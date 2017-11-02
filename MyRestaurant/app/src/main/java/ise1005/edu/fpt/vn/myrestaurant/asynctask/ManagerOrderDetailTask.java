@@ -84,6 +84,7 @@ public class ManagerOrderDetailTask {
                     String quantity = oneMenu.getString("quantity");
                     String price = oneMenu.getString("price");
                     String note = oneMenu.getString("note");
+                    String status = oneMenu.getString("status");
                     JSONObject productResult = oneMenu.getJSONObject("product");
 
                     OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
@@ -93,8 +94,8 @@ public class ManagerOrderDetailTask {
                     orderDetailDTO.setProduct_id(Integer.parseInt(product_id));
                     orderDetailDTO.setQuantity(Integer.parseInt(quantity));
                     orderDetailDTO.setPrice(Double.parseDouble(price));
+                    orderDetailDTO.setStatus(Integer.parseInt(status));
                     orderDetailDTO.setProduct(JSonHelper.get(productResult));
-
                     lstMenus.add(orderDetailDTO);
                 }
 
