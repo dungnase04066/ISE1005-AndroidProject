@@ -33,6 +33,7 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
         TextView txtprice;
         TextView txtQuantity;
         ImageView info;
+        ImageView pic;
     }
 
     public ListOrderDetailAdapter(ArrayList<OrderDetailDTO> dataSet, Context mContext) {
@@ -79,6 +80,7 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
             viewHolder.txtprice = (TextView) convertView.findViewById(R.id.price_number);
             viewHolder.info = (ImageView) convertView.findViewById(R.id.item_info);
             viewHolder.txtQuantity = (TextView) convertView.findViewById(R.id.quantity_number);
+            viewHolder.pic = (ImageView) convertView.findViewById(R.id.pic_product);
             result = convertView;
 
             convertView.setTag(viewHolder);
@@ -97,6 +99,7 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
         viewHolder.txtQuantity.setText(dataModel.getQuantity()+"");
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
+        viewHolder.pic.setImageResource(R.mipmap.ic_shop);
         // Return the completed view to render on screen
         return convertView;
     }
