@@ -1,5 +1,6 @@
 package ise1005.edu.fpt.vn.myrestaurant.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -35,10 +36,31 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
         ImageView info;
     }
 
+    @SuppressLint("LongLogTag")
     public ListOrderDetailAdapter(ArrayList<OrderDetailDTO> dataSet, Context mContext) {
         super(mContext, R.layout.row_order_detail, dataSet);
-        this.dataSet = dataSet;
+        this.dataSet = new ArrayList<>();
+        for (OrderDetailDTO data : dataSet) {
+            if (data.getStatus() == 0) {
+                this.dataSet.add(data);
+            }
+        }
         this.mContext = mContext;
+    }
+
+    @Override
+    public int getCount() {
+        return dataSet.size();
+    }
+
+    @Override
+    public OrderDetailDTO getItem(int i) {
+        return dataSet.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return dataSet.get(i).getId();
     }
 
     @Override
@@ -90,11 +112,10 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
         result.startAnimation(animation);
         lastPosition = position;
-
         viewHolder.txtName.setText(dataModel.getProduct().getName());
         viewHolder.txtdescription.setText(dataModel.getProduct().getName());
         viewHolder.txtprice.setText(dataModel.getProduct().getPrice() + "");
-        viewHolder.txtQuantity.setText(dataModel.getQuantity()+"");
+        viewHolder.txtQuantity.setText(dataModel.getQuantity() + "");
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
         // Return the completed view to render on screen

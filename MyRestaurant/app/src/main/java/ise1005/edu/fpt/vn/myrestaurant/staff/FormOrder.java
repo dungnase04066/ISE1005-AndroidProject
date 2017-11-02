@@ -37,8 +37,8 @@ public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler,Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_form);
-        mProductBtnCancel = (FloatingActionButton) findViewById(R.id.mProductBtnCancel);
-        mProductBtnCancel.setOnClickListener(this);
+//        mProductBtnCancel = (FloatingActionButton) findViewById(R.id.mProductBtnCancel);
+//        mProductBtnCancel.setOnClickListener(this);
         inputdata = (EditText) findViewById(R.id.mProductEdtSearch);
         inputdata.addTextChangedListener(this);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -91,12 +91,12 @@ public class FormOrder extends AppCompatActivity implements IAsyncTaskHandler,Vi
 
     @Override
     public void onClick(View view) {
-        int getWiget = view.getId();
-        if(getWiget == R.id.mProductBtnCancel){
-            Intent returnIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED,returnIntent);
-            finish();
-        }
+//        int getWiget = view.getId();
+//        if(getWiget == R.id.mProductBtnCancel){
+//            Intent returnIntent = new Intent();
+//            setResult(Activity.RESULT_CANCELED,returnIntent);
+//            finish();
+//        }
     }
 
     @Override
