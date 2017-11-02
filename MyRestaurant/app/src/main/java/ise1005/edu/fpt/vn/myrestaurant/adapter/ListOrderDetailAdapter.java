@@ -15,6 +15,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ise1005.edu.fpt.vn.myrestaurant.R;
+import ise1005.edu.fpt.vn.myrestaurant.asynctask.DownloadImageTask;
+import ise1005.edu.fpt.vn.myrestaurant.config.Constants;
 import ise1005.edu.fpt.vn.myrestaurant.dto.OrderDetailDTO;
 
 
@@ -103,6 +105,7 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
             viewHolder.info = (ImageView) convertView.findViewById(R.id.item_info);
             viewHolder.txtQuantity = (TextView) convertView.findViewById(R.id.quantity_number);
             viewHolder.pic = (ImageView) convertView.findViewById(R.id.pic_product);
+
             result = convertView;
 
             convertView.setTag(viewHolder);
@@ -121,6 +124,8 @@ public class ListOrderDetailAdapter extends ArrayAdapter<OrderDetailDTO> impleme
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
         viewHolder.pic.setImageResource(R.mipmap.ic_shop);
+        new DownloadImageTask(viewHolder.pic)
+                .execute(Constants.API_URL + "product/image/?id=" + dataModel.getProduct().getId());
         // Return the completed view to render on screen
         return convertView;
     }
