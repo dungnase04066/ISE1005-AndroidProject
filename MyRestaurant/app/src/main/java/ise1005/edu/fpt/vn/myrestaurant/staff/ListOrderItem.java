@@ -40,7 +40,7 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
     FloatingActionButton mProductBtnCancelItem;
     FloatingActionButton mProductBtnAddItem;
     FloatingActionButton mProductBtnPay;
-
+    boolean openPayForm = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,16 +83,29 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                OrderDetailDTO dataModel = dataModels.get(position);
+                ArrayList<OrderDetailDTO> dataSet = new ArrayList<>();
+                for (OrderDetailDTO data : dataModels) {
+                    if (data.getStatus() == 0) {
+                        dataSet.add(data);
+                    }
+                }
+                OrderDetailDTO dataModel = dataSet.get(position);
                 Intent intent = new Intent(getApplicationContext(), UpdateOrderDetail.class);
                 intent.putExtra("orderDetailDTO", dataModel);
-                intent.putExtra("id", position);
+                intent.putExtra("id", findDuplicate(dataModels, dataModel.getProduct()));
                 startActivityForResult(intent, 2);
                 //Snackbar.make(view, dataModel.getName()+"\n"+dataModel.getDescription()+" Price: "+dataModel.getPrice(), Snackbar.LENGTH_LONG)
                 // .setAction("No action", null).show();
             }
         });
+        if (openPayForm) {
+            openPayForm = false;
+            Intent intent = new Intent(this, PayForm.class);
+            intent.putExtra("listPay", getListPay());
+            intent.putExtra("table_id", tableID);
+            startActivity(intent);
+            return;
+        }
     }
 
     @Override
@@ -130,11 +143,12 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
         }
 
         if (getWiget == R.id.mProductBtnPay) {
-
             Intent intent = new Intent(this, PayForm.class);
-            intent.putExtra("listPay", getListPay());
-            intent.putExtra("table_id", tableID);
-            startActivity(intent);
+            ManagerOrderDetailTask orderDetailTask = new ManagerOrderDetailTask("get", this.tableID, this, listView, null, null, null);
+//            intent.putExtra("listPay", getListPay());
+//            intent.putExtra("table_id", tableID);
+//            startActivity(intent);
+            openPayForm = true;
             return;
         }
 
@@ -183,10 +197,10 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
                         orderDetailDTO.setOrder_id(-1);
                         dataModels.add(orderDetailDTO);
                     } else {*/
-                        orderDetailDTO.setQuantity(orderDetailDTO.getQuantity() + 1);
-                        orderDetailDTO.setProduct_id(productDTO.getId());
-                        dataModels.set(index, orderDetailDTO);
-                   // }
+                    orderDetailDTO.setQuantity(orderDetailDTO.getQuantity() + 1);
+                    orderDetailDTO.setProduct_id(productDTO.getId());
+                    dataModels.set(index, orderDetailDTO);
+                    // }
                 }
                 onPostExecute(dataModels);
             }
@@ -210,7 +224,7 @@ public class ListOrderItem extends AppCompatActivity implements IAsyncTaskHandle
 
     public int findDuplicate(ArrayList<OrderDetailDTO> dataModels, ProductDTO productDTO) {
         for (int index = 0, length = dataModels.size(); index < length; index++) {
-            if (dataModels.get(index).getProduct().getId() == productDTO.getId() && dataModels.get(index).getStatus()==0) {
+            if (dataModels.get(index).getProduct().getId() == productDTO.getId() && dataModels.get(index).getStatus() == 0) {
                 return index;
             }
         }

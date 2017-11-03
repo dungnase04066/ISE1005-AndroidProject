@@ -62,7 +62,8 @@
             android:layout_gravity="bottom"
             app:backgroundTint="@color/colorPrimaryDark"
             app:fabSize="mini"
-            app:srcCompat="@android:drawable/ic_menu_revert" />
+            app:srcCompat="@android:drawable/ic_menu_revert"
+            android:visibility="gone"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="20dp"
